@@ -1,87 +1,97 @@
-# TerraSight — Project Vision
+# TeraSight — Project Vision
 
-## Mission
-
-TerraSight is an AI-powered environmental intelligence platform that transforms environmental imagery into actionable intelligence. By combining advanced computer vision, environmental analytics, and AI-generated insights, TerraSight helps organizations understand, monitor, and reduce pollution more effectively.
-
-**Official Tagline:**
+## Tagline
 **Turning Environmental Imagery into Actionable Intelligence.**
 
-**Brand Motto:**
+## Motto
 **See. Understand. Restore.**
 
----
-
-## Powered by PrithviQ AI
-
-TerraSight is powered by **PrithviQ AI**, a dedicated environmental computer vision engine responsible for waste detection and classification. PrithviQ AI serves as the underlying inference layer, while TerraSight provides the user-facing platform, analytics, reporting, and decision-support capabilities.
+## Powered By
+**PrithviQ AI — Advanced Environmental Computer Vision Engine**
 
 ---
 
-## The Problem
+# Mission
 
-Environmental agencies, NGOs, municipalities, and researchers often rely on manual field surveys to estimate pollution levels in lakes, rivers, and public spaces. These methods are time-consuming, inconsistent, and difficult to scale.
+TeraSight is an AI-powered environmental intelligence platform designed to help governments, NGOs, municipalities, researchers, and environmental organizations monitor, understand, and restore polluted ecosystems using computer vision and artificial intelligence.
 
-Most organizations lack tools to answer critical questions:
-
-* How much waste is present?
-* What types of waste dominate the area?
-* How severe is the pollution?
-* What cleanup actions should be prioritized?
-* How has the site changed over time?
+The platform transforms environmental imagery into actionable insights by automatically detecting, classifying, quantifying, and analyzing waste found in rivers, lakes, coastlines, and other public environments.
 
 ---
 
-## The Vision
+# The Problem
 
-TerraSight aims to become the operating system for environmental monitoring.
+Environmental pollution monitoring today is largely manual, inconsistent, and difficult to scale. Organizations often rely on field surveys and human estimation, making it expensive, time-consuming, and subjective.
 
-A user should be able to upload an image captured from a smartphone, drone, CCTV camera, or field survey and instantly receive:
-
-* AI-based waste detection.
-* Waste composition analysis.
-* Surface coverage estimation.
-* Environmental Risk Index (ERI).
-* Recyclability and recovery estimates.
-* AI-generated cleanup recommendations.
-* Historical trend analysis.
-* Professional environmental assessment reports.
+Critical questions remain difficult to answer:
+- How much waste is present?
+- What type of waste dominates the area?
+- Which locations require urgent intervention?
+- What is the estimated cleanup effort and cost?
+- How has a site improved after a cleanup campaign?
+- What environmental impact can be recovered through recycling?
 
 ---
 
-## Target Users
+# The Vision
 
-### Primary Users
+TeraSight aims to become the operating system for environmental monitoring and restoration.
 
-* NGOs
-* Municipal Corporations
-* Government Environmental Agencies
-* Researchers
-* Waste Management Organizations
-
-### Secondary Users
-
-* Educational Institutions
-* Volunteer Groups
-* CSR & ESG Teams
-* Environmental Startups
+A user should be able to upload a single image captured from a smartphone, drone, CCTV camera, or field survey and instantly receive:
+- AI-powered waste detection.
+- Waste category distribution.
+- Estimated waste quantity and coverage.
+- Environmental Risk Index (ERI).
+- Cleanup cost estimation.
+- Carbon recovery estimation.
+- AI-generated cleanup recommendations.
+- Historical and before-vs-after comparisons.
+- Professional environmental assessment reports.
 
 ---
 
-## Long-Term Goal
+# Powered by PrithviQ AI
 
-TerraSight will evolve from a waste detection platform into a complete environmental intelligence ecosystem capable of:
+PrithviQ AI serves as the dedicated machine learning engine behind TeraSight. It is responsible for environmental waste detection and classification using advanced object detection models trained on custom environmental datasets.
 
-* Monitoring lakes, rivers, and coastlines.
-* Supporting drone and satellite imagery.
-* Tracking environmental changes over time.
-* Assisting policymakers with data-driven decisions.
-* Providing AI-powered recommendations for environmental restoration.
+TeraSight provides the platform, user experience, analytics, reporting, intelligence layer, and decision-support system built on top of the PrithviQ AI engine.
 
 ---
 
-## Core Philosophy
+# Target Users
 
-TerraSight does not simply identify pollution.
+## Primary Users
+- Municipal Corporations
+- NGOs
+- Government Environmental Agencies
+- Research Institutions
+- Waste Management Organizations
 
-It converts visual environmental data into meaningful insights that enable people and organizations to take informed action toward a cleaner and more sustainable planet.
+## Secondary Users
+- Schools and Universities
+- CSR & ESG Teams
+- Volunteer Organizations
+- Environmental Startups
+- Community Cleanup Groups
+
+---
+
+# Long-Term Goal
+
+The long-term goal of TeraSight is to create a global environmental intelligence platform capable of:
+- Monitoring rivers, lakes, and coastlines.
+- Supporting drone and satellite imagery.
+- Tracking environmental changes over time.
+- Building a large environmental data repository.
+- Helping governments and organizations make data-driven environmental decisions.
+- Accelerating environmental restoration through AI.
+
+---
+
+# Core Philosophy
+
+TeraSight is not just an object detection application.
+
+It is an environmental intelligence platform that transforms visual data into knowledge, knowledge into decisions, and decisions into measurable environmental action.
+
+**See. Understand. Restore.**
