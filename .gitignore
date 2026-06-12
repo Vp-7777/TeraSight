@@ -1,0 +1,67 @@
+# Environment
+.env
+.env.*
+!.env.example
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Logs
+*.log
+logs/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+env/
+*.egg-info/
+.eggs/
+dist/
+build/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Node
+node_modules/
+.npm/
+.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# Next.js
+.next/
+out/
+
+# ML artifacts
+prithviq-inference/weights/*
+!prithviq-inference/weights/.gitkeep
+prithviq-inference/datasets/*
+!prithviq-inference/datasets/.gitkeep
+*.pt
+*.pth
+*.onnx
+
+# Docker
+docker-compose.override.yml
+
+# Database
+*.sqlite3

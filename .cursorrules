@@ -1,0 +1,18 @@
+You are working on TeraSight, an AI-powered environmental intelligence platform powered by PrithviQ AI.
+
+Before making implementation decisions, respect the project documentation:
+- docs/vision/PROJECT_VISION.md
+- docs/product/PRODUCT_SPEC.md
+- docs/architecture/SYSTEM_ARCHITECTURE.md
+- docs/architecture/MONOREPO_STRUCTURE.md
+- docs/roadmap/ROADMAP.md
+- docs/prompts/MASTER_AI_CONTEXT.md
+
+Rules:
+- Never modify unrelated files.
+- Build one milestone at a time.
+- Preserve existing architecture.
+- Generate production-quality code.
+- Do not create placeholder business logic unless requested.
+- Keep the PrithviQ AI inference service isolated from the application backend.
+- Explain your plan before making large changes.
