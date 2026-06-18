@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 
+import { AppProviders } from "@/components/providers/AppProviders";
 import "@/styles/globals.css";
 
 const geistSans = Geist({
@@ -14,9 +15,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "TeraSight",
+  title: "TeraSight — Environmental Intelligence Platform",
   description:
-    "Turning Environmental Imagery into Actionable Intelligence.",
+    "Turning Environmental Imagery into Actionable Intelligence. Powered by PrithviQ AI.",
 };
 
 export default function RootLayout({
@@ -25,11 +26,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-    >
-      <body className="flex min-h-full flex-col">{children}</body>
+    <html lang="en" suppressHydrationWarning className={`${geistSans.variable} ${geistMono.variable} h-full`}>
+      <body className="min-h-full antialiased">
+        <AppProviders>{children}</AppProviders>
+      </body>
     </html>
   );
 }

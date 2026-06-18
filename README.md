@@ -18,35 +18,88 @@ TeraSight/
 
 ## Prerequisites
 
-- Node.js 22+
-- Python 3.12+
-- Docker & Docker Compose
+| Tool | Version |
+| ---- | ------- |
+| Node.js | 22+ |
+| Python | 3.12+ |
+| Docker Desktop | Latest (with Docker Compose v2) |
 
-## Quick Start
+## Local Setup
 
-1. Copy the environment template:
+### 1. Clone and configure environment
 
-   ```bash
-   cp .env.example .env
-   ```
+From the repository root:
 
-2. Start the full stack with Docker Compose:
+```bash
+cp .env.example .env
+```
 
-   ```bash
-   docker compose up --build
-   ```
+On Windows (PowerShell):
 
-3. Access services:
+```powershell
+Copy-Item .env.example .env
+```
 
-   | Service            | URL                          |
-   | ------------------ | ---------------------------- |
-   | Frontend           | http://localhost:3000        |
-   | Backend API        | http://localhost:8000        |
-   | API Docs           | http://localhost:8000/docs   |
-   | Inference Service  | http://localhost:8001        |
-   | Inference Docs     | http://localhost:8001/docs   |
+The `.env` file is optional for Docker Compose (service URLs are defined in `docker-compose.yml`). It is required when running services outside Docker.
+
+For **local (non-Docker) development**, edit `.env` and use the commented `localhost` values for `DATABASE_URL`, `REDIS_URL`, and `INFERENCE_SERVICE_URL`.
+
+### 2. Start the full stack with Docker Compose
+
+Ensure Docker Desktop is running, then from the repository root:
+
+```bash
+docker compose up --build
+```
+
+To run in the background:
+
+```bash
+docker compose up --build -d
+```
+
+This starts five services:
+
+| Service | Container | Port |
+| ------- | --------- | ---- |
+| Frontend | `terasight-web` | 3000 |
+| Backend API | `terasight-api` | 8000 |
+| Inference | `prithviq-inference` | 8001 |
+| PostgreSQL | `postgres` | 5432 |
+| Redis | `redis` | 6379 |
+
+### 3. Verify services
+
+| Check | URL / Command |
+| ----- | ------------- |
+| Frontend | http://localhost:3000 |
+| API health | http://localhost:8000/health |
+| API docs | http://localhost:8000/docs |
+| Inference health | http://localhost:8001/health |
+| Inference docs | http://localhost:8001/docs |
+
+Expected health responses:
+
+```json
+{"status": "ok", "service": "terasight-api"}
+{"status": "ok", "service": "prithviq-inference"}
+```
+
+Stop the stack:
+
+```bash
+docker compose down
+```
 
 ## Local Development (without Docker)
+
+Run infrastructure and application services separately. PostgreSQL and Redis must be reachable at the URLs in your `.env` (use the `localhost` variants from `.env.example`).
+
+### Infrastructure (PostgreSQL + Redis only)
+
+```bash
+docker compose up postgres redis -d
+```
 
 ### Frontend
 
@@ -56,14 +109,23 @@ npm install
 npm run dev
 ```
 
+Open http://localhost:3000
+
 ### Backend API
 
 ```bash
 cd terasight-api
 python -m venv .venv
-source .venv/bin/activate  # Windows: .venv\Scripts\activate
+```
+
+Activate the virtual environment:
+
+- **macOS / Linux:** `source .venv/bin/activate`
+- **Windows (PowerShell):** `.venv\Scripts\Activate.ps1`
+
+```bash
 pip install -r requirements.txt
-uvicorn app.main:app --reload --port 8000
+uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
 ### PrithviQ Inference
@@ -71,15 +133,42 @@ uvicorn app.main:app --reload --port 8000
 ```bash
 cd prithviq-inference
 python -m venv .venv
-source .venv/bin/activate  # Windows: .venv\Scripts\activate
-pip install -r requirements.txt
-uvicorn app.main:app --reload --port 8001
 ```
 
-## Health Checks
+Activate the virtual environment (same commands as above), then:
 
-- `GET /health` on the backend API returns `{ "status": "ok", "service": "terasight-api" }`
-- `GET /health` on the inference service returns `{ "status": "ok", "service": "prithviq-inference" }`
+```bash
+pip install -r requirements.txt
+uvicorn app.main:app --reload --host 0.0.0.0 --port 8001
+```
+
+## Database Migrations
+
+With PostgreSQL running and `DATABASE_URL` set in `.env`:
+
+```bash
+cd terasight-api
+alembic upgrade head
+```
+
+## Current Features (v0.2)
+
+- Dockerized local platform (frontend, API, inference, PostgreSQL, Redis).
+- Image upload workflow from the TeraSight web app.
+- Mock AI analysis pipeline: Web → API → PrithviQ inference service.
+- Independent PrithviQ inference service with a swappable mock analyzer (YOLO integration planned).
+
+### Test the image analysis flow
+
+1. Start the stack: `docker compose up --build`
+2. Open http://localhost:3000
+3. Upload a JPEG, PNG, or WebP image and click **Analyze Image**
+4. Or call the API directly:
+
+```bash
+curl -X POST http://localhost:8000/api/analyze \
+  -F "file=@/path/to/image.jpg"
+```
 
 ## Documentation
 

@@ -1,21 +1,252 @@
 @import "tailwindcss";
 
+@theme {
+  /* Core colors */
+  --color-background: #06080f;
+  --color-foreground: #f4f7fb;
+  --color-foreground-muted: #94a3b8;
+  --color-accent: #34d399;
+
+  /* Premium surfaces */
+  --color-surface-0: #06080f;
+  --color-surface-1: rgba(255, 255, 255, 0.04);
+  --color-surface-2: rgba(255, 255, 255, 0.06);
+  --color-surface-3: rgba(255, 255, 255, 0.08);
+  --color-border-1: rgba(255, 255, 255, 0.08);
+  --color-border-2: rgba(255, 255, 255, 0.12);
+  --color-border-3: rgba(255, 255, 255, 0.18);
+
+  /* Radii */
+  --radius-xs: 10px;
+  --radius-sm: 14px;
+  --radius-md: 18px;
+  --radius-lg: 22px;
+  --radius-xl: 28px;
+
+  /* Shadows (dark) */
+  --shadow-1: 0 8px 30px rgba(0, 0, 0, 0.35);
+  --shadow-2: 0 18px 60px rgba(0, 0, 0, 0.55);
+  --shadow-3: 0 28px 90px rgba(0, 0, 0, 0.72);
+
+  /* Glows */
+  --glow-emerald: 0 0 50px rgba(16, 185, 129, 0.16);
+  --glow-sky: 0 0 55px rgba(56, 189, 248, 0.14);
+  --glow-rose: 0 0 55px rgba(244, 63, 94, 0.14);
+
+  /* Gradients */
+  --gradient-border: linear-gradient(
+    135deg,
+    rgba(52, 211, 153, 0.35),
+    rgba(56, 189, 248, 0.22),
+    rgba(255, 255, 255, 0.06)
+  );
+  --gradient-hero: radial-gradient(
+      800px 420px at 20% 10%,
+      rgba(16, 185, 129, 0.16),
+      transparent 55%
+    ),
+    radial-gradient(700px 380px at 90% 15%, rgba(56, 189, 248, 0.12), transparent 55%);
+
+  /* Motion */
+  --ease-premium: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-1: 120ms;
+  --dur-2: 180ms;
+  --dur-3: 260ms;
+  --dur-4: 420ms;
+
+  --font-sans: var(--font-geist-sans), system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+}
+
 :root {
-  --background: #f8fafc;
-  --foreground: #0f172a;
-  --accent: #0d9488;
+  color-scheme: dark;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-accent: var(--accent);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+.light {
+  --color-background: #f8fafc;
+  --color-foreground: #0f172a;
+  --color-foreground-muted: #64748b;
+  --color-accent: #059669;
+
+  --color-surface-0: #f8fafc;
+  --color-surface-1: rgba(2, 6, 23, 0.03);
+  --color-surface-2: rgba(2, 6, 23, 0.05);
+  --color-surface-3: rgba(2, 6, 23, 0.07);
+  --color-border-1: rgba(2, 6, 23, 0.08);
+  --color-border-2: rgba(2, 6, 23, 0.12);
+  --color-border-3: rgba(2, 6, 23, 0.16);
+
+  --shadow-1: 0 8px 30px rgba(2, 6, 23, 0.08);
+  --shadow-2: 0 18px 60px rgba(2, 6, 23, 0.12);
+  --shadow-3: 0 28px 90px rgba(2, 6, 23, 0.16);
+
+  color-scheme: light;
 }
 
+html,
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-sans), system-ui, sans-serif;
+  background: var(--color-background);
+  color: var(--color-foreground);
+  text-rendering: geometricPrecision;
+}
+
+.theme-transition,
+.theme-transition * {
+  transition:
+    background-color var(--dur-3) var(--ease-premium),
+    color var(--dur-3) var(--ease-premium),
+    border-color var(--dur-3) var(--ease-premium),
+    box-shadow var(--dur-3) var(--ease-premium) !important;
+}
+
+.glass-panel {
+  position: relative;
+  border: 1px solid var(--color-border-1);
+  background: var(--color-surface-1);
+  backdrop-filter: blur(18px);
+  box-shadow: var(--shadow-1);
+}
+
+.light .glass-panel {
+  border-color: var(--color-border-1);
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.surface-border-gradient {
+  position: relative;
+}
+
+.surface-border-gradient::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: var(--gradient-border);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  opacity: 0.55;
+}
+
+.surface-depth::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    900px 420px at 10% 0%,
+    rgba(52, 211, 153, 0.08),
+    transparent 60%
+  );
+  pointer-events: none;
+  opacity: 0.9;
+}
+
+.grid-bg {
+  background-image:
+    linear-gradient(rgb(255 255 255 / 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(255 255 255 / 0.04) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+.scan-line {
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgb(52 211 153 / 0.35) 50%,
+    transparent 100%
+  );
+  animation: scan-line 2.4s ease-in-out infinite;
+}
+
+@keyframes scan-line {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(400%);
+  }
+}
+
+.skeleton-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgb(255 255 255 / 0.06) 0%,
+    rgb(255 255 255 / 0.14) 50%,
+    rgb(255 255 255 / 0.06) 100%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.4s ease-in-out infinite;
+}
+
+@keyframes skeleton-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.glow-emerald {
+  box-shadow: var(--shadow-1), var(--glow-emerald);
+}
+
+.glow-blue {
+  box-shadow: var(--shadow-1), var(--glow-sky);
+}
+
+.hover-glow {
+  transition: box-shadow var(--dur-3) var(--ease-premium), transform var(--dur-3) var(--ease-premium);
+}
+
+.hover-glow:hover {
+  box-shadow: var(--shadow-2), var(--glow-emerald);
+  transform: translateY(-1px);
+}
+
+.terasight-marker {
+  background: transparent;
+  border: none;
+}
+
+.terasight-marker-inner {
+  position: relative;
+  width: 28px;
+  height: 28px;
+}
+
+.terasight-marker-dot {
+  position: absolute;
+  inset: 8px;
+  border-radius: 9999px;
+  background: var(--marker-color, #10b981);
+  box-shadow: 0 0 12px var(--marker-color, #10b981);
+}
+
+.terasight-marker-pulse {
+  position: absolute;
+  inset: 2px;
+  border-radius: 9999px;
+  background: var(--marker-color, #10b981);
+  opacity: 0.35;
+  animation: marker-pulse 2s ease-out infinite;
+}
+
+.terasight-marker-inner.selected .terasight-marker-dot {
+  inset: 6px;
+  box-shadow: 0 0 18px var(--marker-color, #10b981);
+}
+
+@keyframes marker-pulse {
+  0% {
+    transform: scale(0.6);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(1.6);
+    opacity: 0;
+  }
 }

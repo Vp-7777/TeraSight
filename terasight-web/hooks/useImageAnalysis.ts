@@ -26,6 +26,7 @@ export function useImageAnalysis() {
 
   const previewUrlRef = useRef<string | null>(null);
   const resultPreviewUrlRef = useRef<string | null>(null);
+  const progressRef = useRef(0);
 
   const acceptedTypes = useMemo(
     () => ["image/jpeg", "image/png", "image/webp"],
@@ -77,12 +78,12 @@ export function useImageAnalysis() {
   const handleAnalyze = useCallback(async (file: File) => {
     setErrorMessage(null);
     setIsAnalyzing(true);
+    progressRef.current = 0;
     setProgress(0);
     setStage("uploading");
     setAnalysisResult(null);
     setResultPreviewUrl(null);
 
-    // Lightweight staged progress so the UI feels responsive.
     const milestones: Array<{ stage: AnalysisStage; target: number; ms: number }> = [
       { stage: "uploading", target: 18, ms: 450 },
       { stage: "scanning", target: 45, ms: 650 },
@@ -90,58 +91,55 @@ export function useImageAnalysis() {
       { stage: "generating", target: 92, ms: 650 },
     ];
 
-    let cancelled = false;
-    const bumpTo = async (next: (typeof milestones)[number]) => {
-      setStage(next.stage);
-      const start = performance.now();
-      const from = progress;
+    const bumpTo = (next: (typeof milestones)[number]) =>
+      new Promise<void>((resolve) => {
+        setStage(next.stage);
+        const start = performance.now();
+        const from = progressRef.current;
 
-      return new Promise<void>((resolve) => {
         const tick = () => {
-          if (cancelled) return resolve();
           const t = Math.min(1, (performance.now() - start) / next.ms);
           const value = Math.round(from + (next.target - from) * t);
+          progressRef.current = value;
           setProgress(value);
-          if (t >= 1) return resolve();
+          if (t >= 1) {
+            resolve();
+            return;
+          }
           requestAnimationFrame(tick);
         };
+
         requestAnimationFrame(tick);
       });
-    };
 
     try {
-      for (const m of milestones) {
+      for (const milestone of milestones) {
         // eslint-disable-next-line no-await-in-loop
-        await bumpTo(m);
+        await bumpTo(milestone);
       }
 
       const result = await analyzeImage(file);
-      if (cancelled) return;
 
       setAnalysisResult(result);
 
-      // For now we show the uploaded image as the result preview.
-      // (Later this can be replaced with an annotated result image from the API.)
       if (resultPreviewUrlRef.current) URL.revokeObjectURL(resultPreviewUrlRef.current);
       const resUrl = URL.createObjectURL(file);
       resultPreviewUrlRef.current = resUrl;
       setResultPreviewUrl(resUrl);
 
+      progressRef.current = 100;
       setProgress(100);
       setStage("complete");
     } catch (err) {
       const message = err instanceof Error ? err.message : "Analysis failed. Please try again.";
       setErrorMessage(message);
+      progressRef.current = 0;
       setProgress(0);
       setStage("uploading");
     } finally {
       setIsAnalyzing(false);
     }
-
-    return () => {
-      cancelled = true;
-    };
-  }, [progress]);
+  }, []);
 
   useEffect(() => {
     return () => {
