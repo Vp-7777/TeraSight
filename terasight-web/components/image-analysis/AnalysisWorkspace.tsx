@@ -55,7 +55,7 @@ export function AnalysisWorkspace() {
     <div className="grid gap-5 xl:grid-cols-[280px_minmax(0,1fr)_360px]">
       {/* Left — Upload & controls */}
       <GlassPanel className="flex flex-col overflow-hidden">
-        <div className="border-b border-white/10 px-4 py-4">
+        <div className="border-b border-[color:var(--color-border-1)] px-4 py-4">
           <p className="text-sm font-semibold">Upload</p>
           <p className="text-xs text-foreground-muted">Source imagery</p>
         </div>
@@ -76,7 +76,7 @@ export function AnalysisWorkspace() {
               "flex min-h-[140px] cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed p-4 text-center transition",
               isDragging
                 ? "border-emerald-400/60 bg-emerald-500/10"
-                : "border-white/10 hover:border-emerald-500/30 hover:bg-white/[0.03]",
+                : "border-[color:var(--color-border-1)] hover:border-emerald-500/30 hover:bg-[color:var(--color-surface-1)]",
             )}
           >
             <input
@@ -86,13 +86,13 @@ export function AnalysisWorkspace() {
               className="hidden"
               onChange={(e) => validateAndSelect(e.target.files?.[0])}
             />
-            <Upload className="mb-2 h-5 w-5 text-emerald-300" />
+            <Upload className="mb-2 h-5 w-5 text-[color:var(--color-nav-active-text)]" />
             <p className="text-sm font-medium">Drop image</p>
             <p className="mt-1 text-xs text-foreground-muted">or click to browse</p>
           </div>
 
           {selectedFile ? (
-            <div className="rounded-xl border border-white/10 bg-white/[0.03] p-3">
+            <div className="rounded-xl border border-[color:var(--color-border-1)] bg-[color:var(--color-surface-1)] p-3">
               <p className="truncate text-sm font-medium">{selectedFile.name}</p>
               <p className="mt-1 text-xs text-foreground-muted">
                 {(selectedFile.size / 1024 / 1024).toFixed(2)} MB
@@ -133,7 +133,7 @@ export function AnalysisWorkspace() {
         className="relative min-h-[520px] overflow-hidden"
         glow={isAnalyzing ? "emerald" : analysisResult ? "blue" : "none"}
       >
-        <div className="absolute inset-x-0 top-0 z-10 flex items-center justify-between border-b border-white/10 bg-background/40 px-5 py-3 backdrop-blur-md">
+        <div className="absolute inset-x-0 top-0 z-10 flex items-center justify-between border-b border-[color:var(--color-border-1)] bg-background/40 px-5 py-3 backdrop-blur-md">
           <div className="flex items-center gap-2">
             <ScanSearch className="h-4 w-4 text-accent" />
             <p className="text-sm font-medium">Analysis Canvas</p>
@@ -158,7 +158,7 @@ export function AnalysisWorkspace() {
                 <img
                   src={previewUrl}
                   alt="Analysis preview"
-                  className="w-full rounded-2xl border border-white/10 object-contain shadow-2xl"
+                  className="w-full rounded-2xl border border-[color:var(--color-border-1)] object-contain shadow-2xl"
                 />
                 {isAnalyzing ? (
                   <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-2xl">
@@ -184,7 +184,7 @@ export function AnalysisWorkspace() {
                 className="text-center"
               >
                 <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-500/20 to-sky-500/10">
-                  <ScanSearch className="h-7 w-7 text-emerald-300" />
+                  <ScanSearch className="h-7 w-7 text-[color:var(--color-nav-active-text)]" />
                 </div>
                 <p className="text-lg font-medium">AI Analysis Workspace</p>
                 <p className="mt-2 max-w-sm text-sm text-foreground-muted">
@@ -234,7 +234,7 @@ export function AnalysisWorkspace() {
                     },
                     { label: "Confidence", value: formatConfidence(overallConfidence) },
                   ].map((m) => (
-                    <div key={m.label} className="rounded-lg bg-white/[0.03] p-3">
+                    <div key={m.label} className="rounded-lg bg-[color:var(--color-surface-1)] p-3">
                       <p className="text-xs text-foreground-muted">{m.label}</p>
                       <p className="mt-1 text-lg font-semibold">{m.value}</p>
                     </div>
@@ -251,7 +251,7 @@ export function AnalysisWorkspace() {
                         <span>{d.class}</span>
                         <span className="text-accent">{formatConfidence(d.confidence)}</span>
                       </div>
-                      <div className="h-1.5 overflow-hidden rounded-full bg-white/10">
+                      <div className="h-1.5 overflow-hidden rounded-full bg-[color:var(--color-surface-2)]">
                         <motion.div
                           className="h-full rounded-full bg-gradient-to-r from-emerald-500 to-teal-400"
                           initial={{ width: 0 }}

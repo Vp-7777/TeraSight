@@ -55,11 +55,11 @@ export function IntelligenceCenter() {
       <div className="grid gap-6 xl:grid-cols-12">
         <motion.div variants={fadeInUp} className="space-y-6 xl:col-span-4">
           <GlassPanel className="overflow-hidden">
-            <div className="border-b border-white/10 px-5 py-4">
+            <div className="border-b border-[color:var(--color-border-1)] px-5 py-4">
               <p className="font-medium">AI Event Timeline</p>
             </div>
             <div className="relative space-y-0 p-5">
-              <div className="absolute bottom-4 left-[27px] top-4 w-px bg-white/10" />
+              <div className="absolute bottom-4 left-[27px] top-4 w-px bg-[color:var(--color-surface-2)]" />
               {aiTimeline.map((event, index) => {
                 const Icon = timelineIcons[event.type];
                 return (
@@ -85,7 +85,7 @@ export function IntelligenceCenter() {
           </GlassPanel>
 
           <GlassPanel className="overflow-hidden">
-            <div className="border-b border-white/10 px-5 py-4">
+            <div className="border-b border-[color:var(--color-border-1)] px-5 py-4">
               <p className="font-medium">Active AI Models</p>
             </div>
             <div className="space-y-3 p-4">
@@ -95,7 +95,7 @@ export function IntelligenceCenter() {
                   initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.06 }}
-                  className="rounded-xl border border-white/8 bg-white/[0.02] p-4"
+                  className="rounded-xl border border-[color:var(--color-border-1)] bg-[color:var(--color-surface-1)] p-4"
                 >
                   <div className="flex items-start justify-between">
                     <div>
@@ -164,13 +164,13 @@ export function IntelligenceCenter() {
 
         <motion.div variants={fadeInUp} className="xl:col-span-3">
           <GlassPanel className="overflow-hidden">
-            <div className="border-b border-white/10 px-5 py-4">
+            <div className="border-b border-[color:var(--color-border-1)] px-5 py-4">
               <div className="flex items-center gap-2">
-                <Activity className="h-4 w-4 text-emerald-300" />
+                <Activity className="h-4 w-4 text-[color:var(--color-nav-active-text)]" />
                 <p className="font-medium">Live Activity</p>
               </div>
             </div>
-            <div className="divide-y divide-white/5">
+            <div className="divide-y divide-[color:var(--color-border-1)]">
               {activityFeed.map((item, index) => (
                 <motion.div
                   key={item.id}
@@ -180,7 +180,7 @@ export function IntelligenceCenter() {
                   className="px-5 py-4"
                 >
                   <p className="text-sm">
-                    <span className="font-medium text-emerald-300">{item.actor}</span>{" "}
+                    <span className="font-medium text-[color:var(--color-nav-active-text)]">{item.actor}</span>{" "}
                     <span className="text-foreground-muted">{item.action}</span>{" "}
                     <span className="font-medium">{item.target}</span>
                   </p>

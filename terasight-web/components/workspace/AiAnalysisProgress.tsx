@@ -48,14 +48,14 @@ export function AiAnalysisProgress({ progress, stage, compact = false }: AiAnaly
           <span>Progress</span>
           <span>{progress}%</span>
         </div>
-        <div className="relative h-2 overflow-hidden rounded-full bg-white/10">
+        <div className="relative h-2 overflow-hidden rounded-full bg-[color:var(--color-surface-2)]">
           <motion.div
             className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-emerald-500 via-teal-400 to-sky-400"
             animate={{ width: `${progress}%` }}
             transition={{ ease: "easeOut", duration: 0.3 }}
           />
           <motion.div
-            className="absolute inset-y-0 w-16 bg-gradient-to-r from-transparent via-white/30 to-transparent"
+            className="absolute inset-y-0 w-16 bg-gradient-to-r from-transparent via-[color:var(--color-border-3)] to-transparent"
             animate={{ x: ["-20%", "120%"] }}
             transition={{ duration: 1.6, repeat: Infinity, ease: "linear" }}
           />
@@ -80,7 +80,7 @@ export function AiAnalysisProgress({ progress, stage, compact = false }: AiAnaly
                   ? "border-sky-500/30 bg-sky-500/10"
                   : isComplete
                     ? "border-emerald-500/20 bg-emerald-500/5"
-                    : "border-white/5 bg-white/[0.02]",
+                    : "border-[color:var(--color-border-1)] bg-[color:var(--color-surface-1)]",
               )}
             >
               <div
@@ -89,8 +89,8 @@ export function AiAnalysisProgress({ progress, stage, compact = false }: AiAnaly
                   isActive
                     ? "bg-sky-500/20 text-sky-300"
                     : isComplete
-                      ? "bg-emerald-500/20 text-emerald-300"
-                      : "bg-white/5 text-foreground-muted",
+                      ? "bg-emerald-500/20 text-[color:var(--color-nav-active-text)]"
+                      : "bg-[color:var(--color-surface-1)] text-foreground-muted",
                 )}
               >
                 <Icon className="h-4 w-4" />
@@ -99,7 +99,7 @@ export function AiAnalysisProgress({ progress, stage, compact = false }: AiAnaly
                 <p className="text-sm font-medium">{item.label}</p>
                 {isActive ? (
                   <motion.div
-                    className="mt-1 h-1 overflow-hidden rounded-full bg-white/10"
+                    className="mt-1 h-1 overflow-hidden rounded-full bg-[color:var(--color-surface-2)]"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                   >

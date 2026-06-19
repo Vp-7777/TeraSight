@@ -21,7 +21,7 @@ export function AppShell({ children }: { children: ReactNode }) {
     <div className="relative flex min-h-screen gap-3 bg-background p-3">
       <AmbientGlow />
       <AppSidebar collapsed={collapsed} onToggle={() => setCollapsed((value) => !value)} />
-      <div className="relative z-10 flex min-w-0 flex-1 flex-col overflow-hidden rounded-2xl border border-white/8 bg-[#0a0f18]/90 shadow-xl shadow-black/10">
+      <div className="relative z-10 flex min-w-0 flex-1 flex-col overflow-hidden rounded-2xl border border-[color:var(--color-border-1)] bg-[color:var(--color-background-elevated)]/90 shadow-xl shadow-black/10">
         <AppTopNav />
         <main className="flex-1 overflow-y-auto p-5 lg:p-7">
           <PageTransition>{children}</PageTransition>

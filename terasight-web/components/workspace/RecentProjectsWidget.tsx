@@ -16,7 +16,7 @@ export function RecentProjectsWidget({ limit = 3 }: RecentProjectsWidgetProps) {
 
   return (
     <GlassPanel className="overflow-hidden">
-      <div className="flex items-center gap-2 border-b border-white/10 px-5 py-4">
+      <div className="flex items-center gap-2 border-b border-[color:var(--color-border-1)] px-5 py-4">
         <FolderKanban className="h-4 w-4 text-sky-300" />
         <p className="font-medium">Recent Projects</p>
       </div>
@@ -27,7 +27,7 @@ export function RecentProjectsWidget({ limit = 3 }: RecentProjectsWidgetProps) {
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.06 }}
-            className="rounded-xl border border-white/8 bg-white/[0.02] p-4"
+            className="rounded-xl border border-[color:var(--color-border-1)] bg-[color:var(--color-surface-1)] p-4"
           >
             <div className="flex items-start justify-between gap-2">
               <div>

@@ -99,8 +99,8 @@ export function PlatformSection() {
         >
           {capabilities.map((item) => (
             <motion.div key={item.title} variants={fadeInUp}>
-              <GlassPanel className="group h-full p-6 transition hover:border-emerald-500/20 hover:bg-white/[0.06]">
-                <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-300">
+              <GlassPanel className="group h-full p-6 transition hover:border-emerald-500/20 hover:bg-[color:var(--color-surface-2)]">
+                <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-500/10 text-[color:var(--color-nav-active-text)]">
                   <item.icon className="h-5 w-5" />
                 </div>
                 <h3 className="text-lg font-semibold text-foreground">{item.title}</h3>
@@ -116,7 +116,7 @@ export function PlatformSection() {
 
 export function AnalysisDemoSection() {
   return (
-    <section id="analysis" className="border-y border-white/5 bg-background-elevated/40 py-24 lg:py-32">
+    <section id="analysis" className="border-y border-[color:var(--color-border-1)] bg-background-elevated/40 py-24 lg:py-32">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <SectionHeader
           eyebrow="Live Demo"
@@ -167,7 +167,7 @@ export function UseCasesSection() {
 
 export function ImpactSection() {
   return (
-    <section id="impact" className="border-y border-white/5 py-24 lg:py-32">
+    <section id="impact" className="border-y border-[color:var(--color-border-1)] py-24 lg:py-32">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <SectionHeader
           eyebrow="Impact"
@@ -239,7 +239,7 @@ export function BeforeAfterSection() {
 
 export function ReportPreviewSection() {
   return (
-    <section className="border-y border-white/5 bg-background-elevated/40 py-24 lg:py-32">
+    <section className="border-y border-[color:var(--color-border-1)] bg-background-elevated/40 py-24 lg:py-32">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <SectionHeader
           eyebrow="Reports"
@@ -247,7 +247,7 @@ export function ReportPreviewSection() {
           description="Generate professional intelligence reports with detections, risk scoring, and AI recommendations."
         />
         <GlassPanel className="mt-14 overflow-hidden" glow="blue">
-          <div className="border-b border-white/10 bg-white/5 px-6 py-4">
+          <div className="border-b border-[color:var(--color-border-1)] bg-[color:var(--color-surface-1)] px-6 py-4">
             <p className="text-sm font-medium">Environmental Intelligence Report — Site R-042</p>
           </div>
           <div className="grid gap-6 p-6 lg:grid-cols-3">
@@ -260,7 +260,7 @@ export function ReportPreviewSection() {
             </div>
             <div className="space-y-3">
               <p className="text-xs uppercase tracking-wider text-foreground-muted">Risk Index</p>
-              <div className="h-3 overflow-hidden rounded-full bg-white/10">
+              <div className="h-3 overflow-hidden rounded-full bg-[color:var(--color-surface-2)]">
                 <div className="h-full w-[72%] rounded-full bg-gradient-to-r from-amber-500 to-rose-500" />
               </div>
               <p className="text-2xl font-semibold">72 / 100</p>
@@ -271,7 +271,7 @@ export function ReportPreviewSection() {
                 {["Plastic", "Metal", "Organic"].map((cat) => (
                   <span
                     key={cat}
-                    className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs"
+                    className="rounded-full border border-[color:var(--color-border-1)] bg-[color:var(--color-surface-1)] px-3 py-1 text-xs"
                   >
                     {cat}
                   </span>

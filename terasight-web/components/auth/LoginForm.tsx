@@ -93,7 +93,7 @@ export function LoginForm() {
               />
               <div className="flex items-center justify-between text-sm">
                 <label className="flex items-center gap-2 text-foreground-muted">
-                  <input type="checkbox" className="rounded border-white/20 bg-white/5" />
+                  <input type="checkbox" className="rounded border-[color:var(--color-border-2)] bg-[color:var(--color-surface-1)]" />
                   Remember me
                 </label>
                 <Link href="/forgot-password" className="text-accent hover:underline">
@@ -106,9 +106,9 @@ export function LoginForm() {
             </form>
 
             <div className="my-6 flex items-center gap-4">
-              <div className="h-px flex-1 bg-white/10" />
+              <div className="h-px flex-1 bg-[color:var(--color-surface-2)]" />
               <span className="text-xs text-foreground-muted">or</span>
-              <div className="h-px flex-1 bg-white/10" />
+              <div className="h-px flex-1 bg-[color:var(--color-surface-2)]" />
             </div>
 
             <SocialAuthButtons />

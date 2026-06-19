@@ -14,7 +14,7 @@ const typeConfig: Record<
 > = {
   alert: { icon: AlertCircle, accent: "text-rose-300 bg-rose-500/15" },
   recommendation: { icon: Lightbulb, accent: "text-amber-300 bg-amber-500/15" },
-  trend: { icon: TrendingUp, accent: "text-emerald-300 bg-emerald-500/15" },
+  trend: { icon: TrendingUp, accent: "text-[color:var(--color-nav-active-text)] bg-emerald-500/15" },
 };
 
 interface AiInsightsWidgetProps {
@@ -34,7 +34,7 @@ export function AiInsightsWidget({ limit = 3 }: AiInsightsWidgetProps) {
 
   return (
     <GlassPanel className="overflow-hidden">
-      <div className="flex items-center justify-between border-b border-white/10 px-5 py-4">
+      <div className="flex items-center justify-between border-b border-[color:var(--color-border-1)] px-5 py-4">
         <div className="flex items-center gap-2">
           <Sparkles className="h-4 w-4 text-sky-300" />
           <div>
@@ -48,7 +48,7 @@ export function AiInsightsWidget({ limit = 3 }: AiInsightsWidgetProps) {
               key={i}
               className={cn(
                 "h-1.5 rounded-full transition-all",
-                i === activeIndex ? "w-4 bg-emerald-400" : "w-1.5 bg-white/20",
+                i === activeIndex ? "w-4 bg-emerald-400" : "w-1.5 bg-[color:var(--color-surface-3)]",
               )}
             />
           ))}
@@ -69,7 +69,7 @@ export function AiInsightsWidget({ limit = 3 }: AiInsightsWidgetProps) {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -12 }}
                 transition={{ duration: 0.35 }}
-                className="rounded-xl border border-white/8 bg-white/[0.02] p-4"
+                className="rounded-xl border border-[color:var(--color-border-1)] bg-[color:var(--color-surface-1)] p-4"
               >
                 <div className="flex gap-3">
                   <div
@@ -101,7 +101,7 @@ export function AiInsightsWidget({ limit = 3 }: AiInsightsWidgetProps) {
                 initial={{ opacity: 0, x: -8 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: index * 0.07 }}
-                className="rounded-xl border border-white/8 bg-white/[0.02] p-4 opacity-60 transition hover:border-white/15 hover:bg-white/[0.04] hover:opacity-100"
+                className="rounded-xl border border-[color:var(--color-border-1)] bg-[color:var(--color-surface-1)] p-4 opacity-60 transition hover:border-[color:var(--color-border-2)] hover:bg-[color:var(--color-surface-1)] hover:opacity-100"
               >
                 <div className="flex gap-3">
                   <div

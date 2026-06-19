@@ -8,7 +8,7 @@ export default function VerifyEmailPage() {
   return (
     <div className="flex min-h-screen items-center justify-center px-6 py-12">
       <GlassPanel className="max-w-md p-10 text-center" glow="emerald">
-        <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-emerald-500/15 text-emerald-300">
+        <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-emerald-500/15 text-[color:var(--color-nav-active-text)]">
           <MailCheck className="h-8 w-8" />
         </div>
         <h1 className="text-2xl font-semibold">Verify your email</h1>

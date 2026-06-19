@@ -103,7 +103,7 @@ export function KpiCard({ metric, index = 0 }: KpiCardProps) {
               })}
             </svg>
           </div>
-          <div className="flex h-11 w-11 items-center justify-center rounded-[var(--radius-md)] border border-emerald-500/20 bg-emerald-500/10 text-emerald-300">
+          <div className="flex h-11 w-11 items-center justify-center rounded-[var(--radius-md)] border border-emerald-500/20 bg-emerald-500/10 text-[color:var(--color-nav-active-text)]">
             <Icon className="h-5 w-5" />
           </div>
         </div>

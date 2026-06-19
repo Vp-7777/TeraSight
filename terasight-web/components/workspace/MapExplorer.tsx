@@ -51,7 +51,7 @@ export function MapExplorer({ embedded = false }: MapExplorerProps) {
       className={
         embedded
           ? "relative h-full min-h-[280px] overflow-hidden"
-          : "relative min-h-[calc(100vh-12rem)] overflow-hidden rounded-2xl border border-white/10"
+          : "relative min-h-[calc(100vh-12rem)] overflow-hidden rounded-2xl border border-[color:var(--color-border-1)]"
       }
     >
       {mapReady ? (

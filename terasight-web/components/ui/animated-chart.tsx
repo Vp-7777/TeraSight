@@ -105,7 +105,7 @@ export function AnimatedBarChart({ title, subtitle, data }: ChartProps) {
               <span>{item.label}</span>
               <span className="text-foreground-muted">{item.value}</span>
             </div>
-            <div className="h-2 overflow-hidden rounded-full bg-white/10">
+            <div className="h-2 overflow-hidden rounded-full bg-[color:var(--color-surface-2)]">
               <motion.div
                 className="h-full rounded-full"
                 style={{ backgroundColor: item.color ?? "#10b981" }}
