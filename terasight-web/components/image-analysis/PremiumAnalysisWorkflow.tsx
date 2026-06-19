@@ -59,9 +59,9 @@ export function PremiumAnalysisWorkflow() {
         )}
       >
         <GlassPanel className="overflow-hidden" glow={isAnalyzing ? "emerald" : "none"}>
-          <div className="border-b border-white/10 px-6 py-5">
+          <div className="border-b border-[color:var(--color-border-1)] px-6 py-5">
             <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/15 text-emerald-300">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/15 text-[color:var(--color-nav-active-text)]">
                 <ScanSearch className="h-5 w-5" />
               </div>
               <div>
@@ -89,7 +89,7 @@ export function PremiumAnalysisWorkflow() {
                 "relative flex min-h-[280px] flex-col items-center justify-center rounded-2xl border-2 border-dashed px-6 py-10 transition",
                 isDragging
                   ? "border-emerald-400/60 bg-emerald-500/10"
-                  : "border-white/10 bg-white/[0.02] hover:border-emerald-500/30",
+                  : "border-[color:var(--color-border-1)] bg-[color:var(--color-surface-1)] hover:border-emerald-500/30",
               )}
             >
               <input
@@ -187,7 +187,7 @@ export function PremiumAnalysisWorkflow() {
               className="space-y-5"
             >
               <GlassPanel className="overflow-hidden" glow="emerald">
-                <div className="flex items-center justify-between border-b border-white/10 px-6 py-5">
+                <div className="flex items-center justify-between border-b border-[color:var(--color-border-1)] px-6 py-5">
                   <div>
                     <p className="text-xs uppercase tracking-[0.18em] text-accent">
                       Analysis Complete
@@ -199,7 +199,7 @@ export function PremiumAnalysisWorkflow() {
                   </Badge>
                 </div>
                 <div className="grid gap-4 p-6 sm:grid-cols-[140px_1fr]">
-                  <div className="relative overflow-hidden rounded-xl border border-white/10">
+                  <div className="relative overflow-hidden rounded-xl border border-[color:var(--color-border-1)]">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={resultPreviewUrl}
@@ -232,7 +232,7 @@ export function PremiumAnalysisWorkflow() {
                     ].map((metric) => (
                       <div
                         key={metric.label}
-                        className="rounded-xl border border-white/10 bg-white/[0.03] p-4"
+                        className="rounded-xl border border-[color:var(--color-border-1)] bg-[color:var(--color-surface-1)] p-4"
                       >
                         <p className="text-xs text-foreground-muted">{metric.label}</p>
                         <p className="mt-1 text-xl font-semibold">{metric.value}</p>

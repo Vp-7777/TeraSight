@@ -13,7 +13,7 @@ export function SavedAnalysesWidget({ limit = 3 }: { limit?: number }) {
 
   return (
     <GlassPanel className="overflow-hidden">
-      <div className="flex items-center justify-between border-b border-white/10 px-5 py-4">
+      <div className="flex items-center justify-between border-b border-[color:var(--color-border-1)] px-5 py-4">
         <div className="flex items-center gap-2">
           <Bookmark className="h-4 w-4 text-sky-300" />
           <p className="font-medium">Saved Analyses</p>
@@ -29,14 +29,14 @@ export function SavedAnalysesWidget({ limit = 3 }: { limit?: number }) {
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.06 }}
-            className="rounded-xl border border-white/8 bg-white/[0.02] p-4 transition hover:border-emerald-500/20"
+            className="rounded-xl border border-[color:var(--color-border-1)] bg-[color:var(--color-surface-1)] p-4 transition hover:border-emerald-500/20"
           >
             <div className="flex items-start justify-between gap-2">
               <div>
                 <p className="text-sm font-medium">{item.title}</p>
                 <p className="text-xs text-foreground-muted">{item.site}</p>
               </div>
-              <span className="rounded-lg bg-emerald-500/15 px-2 py-1 text-xs font-medium text-emerald-300">
+              <span className="rounded-lg bg-emerald-500/15 px-2 py-1 text-xs font-medium text-[color:var(--color-nav-active-text)]">
                 ERI {item.risk}
               </span>
             </div>

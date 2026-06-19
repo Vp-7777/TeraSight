@@ -14,7 +14,7 @@ const criticalSites = indianMapSites
 export function EnvironmentalAlertsPanel() {
   return (
     <GlassPanel className="overflow-hidden">
-      <div className="flex items-center gap-2 border-b border-white/10 px-5 py-4">
+      <div className="flex items-center gap-2 border-b border-[color:var(--color-border-1)] px-5 py-4">
         <ShieldAlert className="h-4 w-4 text-rose-400" />
         <p className="font-medium">Environmental Alerts</p>
         <Badge variant="danger" className="ml-auto px-2 py-0 text-[10px]">
@@ -29,7 +29,7 @@ export function EnvironmentalAlertsPanel() {
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.06 }}
-            className="flex items-start gap-3 rounded-xl border border-white/8 bg-white/[0.02] p-3 transition hover:border-rose-500/20"
+            className="flex items-start gap-3 rounded-xl border border-[color:var(--color-border-1)] bg-[color:var(--color-surface-1)] p-3 transition hover:border-rose-500/20"
           >
             <div className="relative mt-0.5">
               <AlertTriangle className="h-4 w-4 text-rose-400" />

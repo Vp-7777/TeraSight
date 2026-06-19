@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export function MarketingFooter() {
   return (
-    <footer className="border-t border-white/8 bg-background/80">
+    <footer className="border-t border-[color:var(--color-border-1)] bg-background/80">
       <div className="mx-auto flex max-w-7xl flex-col gap-6 px-6 py-10 md:flex-row md:items-center md:justify-between lg:px-8">
         <div>
           <p className="font-semibold">TeraSight</p>

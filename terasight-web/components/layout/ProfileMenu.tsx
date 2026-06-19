@@ -13,10 +13,10 @@ import {
   Users,
 } from "lucide-react";
 import Link from "next/link";
-import { useTheme } from "next-themes";
 import { useEffect, useRef, useState } from "react";
 
 import { useSession } from "@/lib/session/session-context";
+import { useThemeToggle } from "@/lib/theme/use-theme-toggle";
 import { cn } from "@/lib/utils";
 
 const menuItems = [
@@ -30,12 +30,9 @@ const menuItems = [
 
 export function ProfileMenu({ compact = false }: { compact?: boolean }) {
   const { user, logout } = useSession();
-  const { theme, setTheme } = useTheme();
+  const { mounted, isDark, toggleTheme } = useThemeToggle();
   const [open, setOpen] = useState(false);
-  const [mounted, setMounted] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => setMounted(true), []);
 
   useEffect(() => {
     const handler = (e: MouseEvent) => {
@@ -57,7 +54,7 @@ export function ProfileMenu({ compact = false }: { compact?: boolean }) {
         type="button"
         onClick={() => setOpen((v) => !v)}
         className={cn(
-          "flex items-center gap-3 rounded-xl border border-white/10 bg-white/[0.04] transition hover:bg-white/[0.07]",
+          "flex items-center gap-3 rounded-xl border border-[color:var(--color-border-1)] bg-[color:var(--color-surface-1)] transition hover:bg-[color:var(--color-surface-2)]",
           compact ? "h-10 w-10 justify-center p-0" : "px-3 py-2",
         )}
         aria-expanded={open}
@@ -89,10 +86,10 @@ export function ProfileMenu({ compact = false }: { compact?: boolean }) {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 8, scale: 0.98 }}
             transition={{ duration: 0.18 }}
-            className="absolute bottom-full right-0 z-50 mb-2 w-64 overflow-hidden rounded-2xl border border-white/10 bg-background-elevated/95 shadow-2xl backdrop-blur-xl"
+            className="absolute bottom-full right-0 z-50 mb-2 w-64 overflow-hidden rounded-2xl border border-[color:var(--color-border-1)] bg-background-elevated/95 shadow-2xl backdrop-blur-xl"
             role="menu"
           >
-            <div className="border-b border-white/10 px-4 py-3">
+            <div className="border-b border-[color:var(--color-border-1)] px-4 py-3">
               <p className="text-sm font-semibold">{name}</p>
               <p className="text-xs text-foreground-muted">{user?.email ?? "vishal.sharma@suratmunicipal.gov.in"}</p>
               <p className="mt-1 text-[11px] text-accent">{user?.role ?? "Environmental Analyst"}</p>
@@ -104,7 +101,7 @@ export function ProfileMenu({ compact = false }: { compact?: boolean }) {
                   key={item.label}
                   href={item.href}
                   onClick={() => setOpen(false)}
-                  className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-foreground-muted transition hover:bg-white/5 hover:text-foreground"
+                  className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-foreground-muted transition hover:bg-[color:var(--color-surface-2)] hover:text-foreground"
                   role="menuitem"
                 >
                   <item.icon className="h-4 w-4 shrink-0" />
@@ -115,12 +112,12 @@ export function ProfileMenu({ compact = false }: { compact?: boolean }) {
               {mounted ? (
                 <button
                   type="button"
-                  onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-                  className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-foreground-muted transition hover:bg-white/5 hover:text-foreground"
+                  onClick={toggleTheme}
+                  className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-foreground-muted transition hover:bg-[color:var(--color-surface-2)] hover:text-foreground"
                   role="menuitem"
                 >
                   <Palette className="h-4 w-4 shrink-0" />
-                  Appearance · {theme === "dark" ? "Dark" : "Light"}
+                  Appearance · {isDark ? "Dark" : "Light"}
                 </button>
               ) : null}
 
@@ -130,7 +127,7 @@ export function ProfileMenu({ compact = false }: { compact?: boolean }) {
                   setOpen(false);
                   logout();
                 }}
-                className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-rose-400 transition hover:bg-rose-500/10"
+                className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-rose-500 transition hover:bg-rose-500/10"
                 role="menuitem"
               >
                 <LogOut className="h-4 w-4 shrink-0" />

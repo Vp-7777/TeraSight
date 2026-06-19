@@ -18,15 +18,15 @@ export default function SettingsPage() {
         </GlassPanel>
         <GlassPanel className="space-y-5 p-6">
           <p className="font-medium">Notifications</p>
-          <label className="flex items-center justify-between rounded-xl border border-white/10 px-4 py-3 text-sm">
+          <label className="flex items-center justify-between rounded-xl border border-[color:var(--color-border-1)] px-4 py-3 text-sm">
             AI analysis alerts
             <input type="checkbox" defaultChecked className="rounded" />
           </label>
-          <label className="flex items-center justify-between rounded-xl border border-white/10 px-4 py-3 text-sm">
+          <label className="flex items-center justify-between rounded-xl border border-[color:var(--color-border-1)] px-4 py-3 text-sm">
             Mission updates
             <input type="checkbox" defaultChecked className="rounded" />
           </label>
-          <label className="flex items-center justify-between rounded-xl border border-white/10 px-4 py-3 text-sm">
+          <label className="flex items-center justify-between rounded-xl border border-[color:var(--color-border-1)] px-4 py-3 text-sm">
             Weekly intelligence digest
             <input type="checkbox" className="rounded" />
           </label>

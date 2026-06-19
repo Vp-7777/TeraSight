@@ -54,7 +54,7 @@ export function GlobeCommandCenter() {
 
   return (
     <div
-      className="relative h-[calc(100vh-4rem)] min-h-[600px] overflow-hidden rounded-2xl border border-white/10 bg-[#020408]"
+      className="relative h-[calc(100vh-4rem)] min-h-[600px] overflow-hidden rounded-2xl border border-[color:var(--color-border-1)] bg-[color:var(--color-surface-0)]"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
@@ -85,7 +85,7 @@ export function GlobeCommandCenter() {
       >
         <motion.div variants={fadeInUp} className="pointer-events-auto absolute left-6 top-6 z-20">
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/20 text-emerald-300">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/20 text-[color:var(--color-nav-active-text)]">
               <Globe2 className="h-5 w-5" />
             </div>
             <div>
@@ -114,7 +114,7 @@ export function GlobeCommandCenter() {
             variants={fadeInUp}
             className={`pointer-events-auto absolute z-20 ${cardPositions[index]}`}
           >
-            <GlassPanel className="w-52 border-white/10 bg-black/40 p-4 backdrop-blur-xl">
+            <GlassPanel className="w-52 border-[color:var(--color-border-1)] bg-[color:var(--color-surface-2)]/80 p-4 backdrop-blur-xl">
               <div className="flex items-center justify-between">
                 <p className="text-xs text-foreground-muted">{metric.label}</p>
                 <Satellite className="h-3.5 w-3.5 text-sky-400/60" />

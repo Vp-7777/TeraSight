@@ -16,10 +16,11 @@ const variants: Record<ButtonVariant, string> = {
   primary:
     "bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-lg shadow-emerald-500/20 hover:from-emerald-400 hover:to-teal-400",
   secondary:
-    "bg-white/8 text-foreground border border-white/10 hover:bg-white/12",
-  ghost: "text-foreground-muted hover:text-foreground hover:bg-white/5",
+    "bg-[color:var(--color-surface-2)] text-foreground border border-[color:var(--color-border-1)] hover:bg-[color:var(--color-surface-3)]",
+  ghost:
+    "text-foreground-muted hover:text-foreground hover:bg-[color:var(--color-surface-2)]",
   outline:
-    "border border-white/15 text-foreground hover:border-emerald-500/40 hover:bg-emerald-500/5",
+    "border border-[color:var(--color-border-2)] text-foreground hover:border-emerald-500/40 hover:bg-[color:var(--color-accent-soft)]",
   gold: "bg-gradient-to-r from-amber-500/90 to-yellow-600/90 text-slate-950 font-semibold shadow-lg shadow-amber-500/20",
 };
 

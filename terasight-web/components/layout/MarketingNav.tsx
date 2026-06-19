@@ -7,7 +7,7 @@ import { marketingNav } from "@/lib/constants/navigation";
 
 export function MarketingNav() {
   return (
-    <header className="fixed inset-x-0 top-0 z-50 border-b border-white/8 bg-background/70 backdrop-blur-xl">
+    <header className="fixed inset-x-0 top-0 z-50 border-b border-[color:var(--color-border-1)] bg-background/70 backdrop-blur-xl">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6 lg:px-8">
         <Link href="/" className="text-sm font-semibold tracking-wide">
           TeraSight

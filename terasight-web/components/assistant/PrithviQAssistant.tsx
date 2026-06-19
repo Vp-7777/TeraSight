@@ -70,10 +70,10 @@ export function PrithviQAssistant() {
             transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
             className="fixed bottom-24 right-6 z-50 w-[min(100vw-2rem,400px)]"
           >
-            <GlassPanel className="flex max-h-[min(70vh,560px)] flex-col overflow-hidden border-white/15 shadow-2xl shadow-emerald-500/10">
-              <div className="flex items-center justify-between border-b border-white/10 bg-gradient-to-r from-emerald-500/10 to-sky-500/5 px-4 py-3">
+            <GlassPanel className="flex max-h-[min(70vh,560px)] flex-col overflow-hidden border-[color:var(--color-border-2)] shadow-2xl shadow-emerald-500/10">
+              <div className="flex items-center justify-between border-b border-[color:var(--color-border-1)] bg-gradient-to-r from-emerald-500/10 to-sky-500/5 px-4 py-3">
                 <div className="flex items-center gap-3">
-                  <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-500/20 text-emerald-300">
+                  <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-500/20 text-[color:var(--color-nav-active-text)]">
                     <Bot className="h-5 w-5" />
                   </div>
                   <div>
@@ -84,7 +84,7 @@ export function PrithviQAssistant() {
                 <button
                   type="button"
                   onClick={closeAssistant}
-                  className="flex h-8 w-8 items-center justify-center rounded-lg text-foreground-muted hover:bg-white/5"
+                  className="flex h-8 w-8 items-center justify-center rounded-lg text-foreground-muted hover:bg-[color:var(--color-surface-1)]"
                   aria-label="Close assistant"
                 >
                   <X className="h-4 w-4" />
@@ -99,14 +99,14 @@ export function PrithviQAssistant() {
                       "max-w-[90%] rounded-2xl px-3.5 py-2.5 text-sm leading-6",
                       msg.role === "user"
                         ? "ml-auto bg-emerald-500/15 text-foreground"
-                        : "bg-white/[0.04] text-foreground-muted",
+                        : "bg-[color:var(--color-surface-1)] text-foreground-muted",
                     )}
                   >
                     {msg.text}
                   </div>
                 ))}
                 {typing ? (
-                  <div className="flex gap-1 rounded-2xl bg-white/[0.04] px-4 py-3 w-fit">
+                  <div className="flex gap-1 rounded-2xl bg-[color:var(--color-surface-1)] px-4 py-3 w-fit">
                     <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-emerald-400 [animation-delay:0ms]" />
                     <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-emerald-400 [animation-delay:120ms]" />
                     <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-emerald-400 [animation-delay:240ms]" />
@@ -114,14 +114,14 @@ export function PrithviQAssistant() {
                 ) : null}
               </div>
 
-              <div className="border-t border-white/10 p-3">
+              <div className="border-t border-[color:var(--color-border-1)] p-3">
                 <div className="mb-2 flex flex-wrap gap-1.5">
                   {assistantPrompts.map((prompt) => (
                     <button
                       key={prompt}
                       type="button"
                       onClick={() => sendMessage(prompt)}
-                      className="rounded-full border border-white/10 bg-white/[0.03] px-2.5 py-1 text-[11px] text-foreground-muted transition hover:border-emerald-500/30 hover:text-emerald-300"
+                      className="rounded-full border border-[color:var(--color-border-1)] bg-[color:var(--color-surface-1)] px-2.5 py-1 text-[11px] text-foreground-muted transition hover:border-emerald-500/30 hover:text-[color:var(--color-nav-active-text)]"
                     >
                       {prompt}
                     </button>
@@ -138,7 +138,7 @@ export function PrithviQAssistant() {
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                     placeholder="Ask about sites, risk, or reports..."
-                    className="h-10 flex-1 rounded-xl border border-white/10 bg-white/[0.03] px-3 text-sm outline-none focus:border-emerald-500/40"
+                    className="h-10 flex-1 rounded-xl border border-[color:var(--color-border-1)] bg-[color:var(--color-surface-1)] px-3 text-sm outline-none focus:border-emerald-500/40"
                   />
                   <Button type="submit" size="sm" className="h-10 w-10 p-0" disabled={typing}>
                     <Send className="h-4 w-4" />

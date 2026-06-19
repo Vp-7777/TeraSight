@@ -13,7 +13,7 @@ export function SocialAuthButtons() {
     <div className="space-y-3">
       {providers.map((provider) => (
         <Button key={provider.label} variant="secondary" className="w-full justify-center" type="button">
-          <span className="flex h-5 w-5 items-center justify-center rounded-md bg-white/10 text-[10px] font-bold">
+          <span className="flex h-5 w-5 items-center justify-center rounded-md bg-[color:var(--color-surface-2)] text-[10px] font-bold">
             {provider.icon}
           </span>
           {provider.label}

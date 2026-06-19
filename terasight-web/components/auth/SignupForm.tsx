@@ -46,9 +46,9 @@ export function SignupForm() {
             </form>
 
             <div className="my-6 flex items-center gap-4">
-              <div className="h-px flex-1 bg-white/10" />
+              <div className="h-px flex-1 bg-[color:var(--color-surface-2)]" />
               <span className="text-xs text-foreground-muted">or</span>
-              <div className="h-px flex-1 bg-white/10" />
+              <div className="h-px flex-1 bg-[color:var(--color-surface-2)]" />
             </div>
 
             <SocialAuthButtons />
