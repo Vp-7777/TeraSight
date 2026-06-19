@@ -88,10 +88,10 @@ export function AnalyticsDashboard() {
             {carbonRecoveryByRegion.map((region) => (
               <div
                 key={region.region}
-                className="rounded-xl border border-white/8 bg-white/[0.02] p-4 transition hover:border-emerald-500/20"
+                className="rounded-xl border border-[color:var(--color-border-1)] bg-[color:var(--color-surface-1)] p-4 transition hover:border-emerald-500/20"
               >
                 <p className="text-sm font-medium">{region.region}</p>
-                <p className="mt-2 text-2xl font-semibold text-emerald-300">{region.value}%</p>
+                <p className="mt-2 text-2xl font-semibold text-[color:var(--color-nav-active-text)]">{region.value}%</p>
                 <p className="mt-1 text-xs text-foreground-muted">carbon recovery</p>
               </div>
             ))}

@@ -131,7 +131,7 @@ export function CommandPalette() {
                       onSelect={() => run(item)}
                       className={cn(
                         "flex cursor-pointer items-center gap-3 rounded-[var(--radius-md)] px-3 py-2.5 text-sm text-foreground-muted outline-none transition",
-                        "aria-selected:bg-white/[0.06] aria-selected:text-foreground",
+                        "aria-selected:bg-[color:var(--color-surface-2)] aria-selected:text-foreground",
                       )}
                     >
                       <span className="flex h-9 w-9 items-center justify-center rounded-[var(--radius-sm)] border border-[color:var(--color-border-1)] bg-[color:var(--color-surface-2)]">

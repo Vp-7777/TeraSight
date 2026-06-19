@@ -105,7 +105,7 @@ export function DashboardContent() {
       <div className="grid gap-6 xl:grid-cols-12">
         <motion.div variants={fadeInUp} className="xl:col-span-8">
           <GlassPanel className="overflow-hidden p-1">
-            <div className="flex items-center justify-between border-b border-white/10 px-5 py-4">
+            <div className="flex items-center justify-between border-b border-[color:var(--color-border-1)] px-5 py-4">
               <div>
                 <p className="font-medium">India Monitoring Overview</p>
                 <p className="text-xs text-foreground-muted">
@@ -117,7 +117,7 @@ export function DashboardContent() {
               </Link>
             </div>
             <div className="flex h-[320px] flex-col items-center justify-center gap-4 rounded-b-2xl bg-gradient-to-br from-emerald-500/10 via-background to-sky-500/10 px-6 text-center">
-              <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-500/15 text-emerald-300">
+              <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-500/15 text-[color:var(--color-nav-active-text)]">
                 <MapPin className="h-7 w-7" />
               </div>
               <div>

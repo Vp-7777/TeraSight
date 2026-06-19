@@ -12,7 +12,7 @@ import { fadeInUp, staggerContainer } from "@/lib/motion";
 const GlobeScene = dynamic(() => import("@/components/three/GlobeScene"), {
   ssr: false,
   loading: () => (
-    <div className="h-[420px] w-full animate-pulse rounded-3xl bg-white/5 lg:h-[520px]" />
+    <div className="h-[420px] w-full animate-pulse rounded-3xl bg-[color:var(--color-surface-1)] lg:h-[520px]" />
   ),
 });
 
@@ -91,9 +91,9 @@ export function HeroSection() {
           className="relative"
         >
           <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-emerald-500/20 via-transparent to-sky-500/20 blur-2xl" />
-          <div className="glass-panel relative overflow-hidden rounded-3xl border border-white/10">
+          <div className="glass-panel relative overflow-hidden rounded-3xl border border-[color:var(--color-border-1)]">
             <GlobeScene className="h-[420px] w-full lg:h-[520px]" />
-            <div className="absolute inset-x-0 bottom-0 border-t border-white/10 bg-background/60 p-5 backdrop-blur-md">
+            <div className="absolute inset-x-0 bottom-0 border-t border-[color:var(--color-border-1)] bg-background/60 p-5 backdrop-blur-md">
               <p className="text-xs uppercase tracking-[0.18em] text-accent">Live Intelligence</p>
               <p className="mt-1 text-sm text-foreground-muted">
                 Real-time environmental monitoring across rivers, coastlines, and urban sites

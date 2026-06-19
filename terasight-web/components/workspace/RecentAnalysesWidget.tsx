@@ -31,7 +31,7 @@ export function RecentAnalysesWidget({ limit = 4, showViewAll = true }: RecentAn
 
   return (
     <GlassPanel className="overflow-hidden">
-      <div className="flex items-center justify-between border-b border-white/10 px-5 py-4">
+      <div className="flex items-center justify-between border-b border-[color:var(--color-border-1)] px-5 py-4">
         <div>
           <p className="font-medium text-foreground">Recent Analyses</p>
           <p className="text-xs text-foreground-muted">Latest PrithviQ AI results</p>
@@ -46,14 +46,14 @@ export function RecentAnalysesWidget({ limit = 4, showViewAll = true }: RecentAn
           </Link>
         ) : null}
       </div>
-      <div className="divide-y divide-white/5">
+      <div className="divide-y divide-[color:var(--color-border-1)]">
         {items.map((item, index) => (
           <motion.div
             key={item.id}
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.05 }}
-            className="flex items-center gap-4 px-5 py-4 transition hover:bg-white/[0.02]"
+            className="flex items-center gap-4 px-5 py-4 transition hover:bg-[color:var(--color-surface-1)]"
           >
             <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500/20 to-sky-500/10 text-xs font-semibold text-emerald-200">
               {item.risk}

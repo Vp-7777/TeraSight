@@ -21,7 +21,7 @@ const actions = [
     description: "Upload & analyze imagery",
     href: "/analyze",
     icon: ScanSearch,
-    accent: "from-emerald-500/20 to-teal-500/10 text-emerald-300",
+    accent: "from-emerald-500/20 to-teal-500/10 text-[color:var(--color-nav-active-text)]",
   },
   {
     label: "Global Globe",
@@ -81,7 +81,7 @@ export function QuickActionsPanel() {
         {actions.map((action) => (
           <motion.div key={action.href} variants={fadeInUp}>
             <Link href={action.href}>
-              <div className="group flex items-start gap-3 rounded-xl border border-white/8 bg-white/[0.02] p-3.5 transition hover:border-emerald-500/20 hover:bg-white/[0.05]">
+              <div className="group flex items-start gap-3 rounded-xl border border-[color:var(--color-border-1)] bg-[color:var(--color-surface-1)] p-3.5 transition hover:border-emerald-500/20 hover:bg-[color:var(--color-surface-2)]">
                 <div
                   className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br ${action.accent}`}
                 >
