@@ -1,0 +1,67 @@
+services:
+  terasight-web:
+    build:
+      context: ./terasight-web
+      target: deps
+    command: npm run dev
+    ports:
+      - "3000:3000"
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:8000
+    volumes:
+      - ./terasight-web:/app
+      - /app/node_modules
+    depends_on:
+      - terasight-api
+
+  terasight-api:
+    build: ./terasight-api
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql://terasight:terasight@postgres:5432/terasight
+      REDIS_URL: redis://redis:6379/0
+      INFERENCE_SERVICE_URL: http://prithviq-inference:8001
+    volumes:
+      - ./terasight-api:/app
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+
+  prithviq-inference:
+    build: ./prithviq-inference
+    ports:
+      - "8001:8001"
+    volumes:
+      - ./prithviq-inference:/app
+      - ./prithviq-inference/weights:/app/weights
+      - ./prithviq-inference/datasets:/app/datasets
+
+  postgres:
+    image: postgres:16-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: terasight
+      POSTGRES_PASSWORD: terasight
+      POSTGRES_DB: terasight
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U terasight -d terasight"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+volumes:
+  postgres_data:
+  redis_data:
