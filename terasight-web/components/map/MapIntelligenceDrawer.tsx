@@ -87,14 +87,14 @@ export function MapIntelligenceDrawer({ site, open, onClose }: MapIntelligenceDr
     <AnimatePresence>
       {open && site ? (
         <motion.aside
-          initial={{ opacity: 0, x: 32 }}
+          initial={{ opacity: 0, x: 40 }}
           animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: 32 }}
+          exit={{ opacity: 0, x: 40 }}
           transition={{ type: "spring", stiffness: 280, damping: 28 }}
-          className="pointer-events-auto absolute right-4 top-4 z-30 flex w-[min(100%,380px)] flex-col gap-3 md:right-6 md:top-6"
+          className="pointer-events-auto absolute bottom-4 right-4 top-4 z-30 flex w-[min(100%,400px)] flex-col md:right-6 md:top-6 md:bottom-6"
         >
-          <GlassPanel glow="emerald" border="gradient" className="max-h-[calc(100vh-8rem)] overflow-y-auto">
-            <div className="sticky top-0 z-10 flex items-start justify-between gap-3 border-b border-[color:var(--color-border-1)] bg-[color:var(--color-surface-1)]/95 px-5 py-4 backdrop-blur-xl">
+          <GlassPanel glow="emerald" border="gradient" className="flex h-full flex-col overflow-hidden">
+            <div className="flex shrink-0 items-start justify-between gap-3 border-b border-[color:var(--color-border-1)] px-5 py-4">
               <div className="min-w-0">
                 <p className="text-[11px] uppercase tracking-wider text-emerald-400">Site Intelligence</p>
                 <h2 className="mt-1 truncate text-lg font-semibold">{site.label}</h2>
@@ -112,7 +112,7 @@ export function MapIntelligenceDrawer({ site, open, onClose }: MapIntelligenceDr
               </button>
             </div>
 
-            <div className="space-y-4 p-5">
+            <div className="flex-1 space-y-4 overflow-y-auto p-5">
               <div className="flex flex-wrap gap-2">
                 <Badge variant={statusVariant(site.status)}>{site.status} Risk</Badge>
                 <Badge variant="ai">ERI {site.risk}</Badge>
@@ -264,16 +264,19 @@ export function MapIntelligenceDrawer({ site, open, onClose }: MapIntelligenceDr
 
 export function MapLiveEventStream({
   events,
+  onEventSelect,
   className,
 }: {
   events: Array<{
     id: string;
     type: string;
+    siteId: string;
     siteLabel: string;
     message: string;
     timestamp: string;
     severity: "critical" | "warning" | "success" | "info";
   }>;
+  onEventSelect?: (siteId: string) => void;
   className?: string;
 }) {
   const iconFor = (type: string, severity: string) => {
@@ -315,13 +318,15 @@ export function MapLiveEventStream({
             {events.slice(0, 6).map((event, index) => {
               const Icon = iconFor(event.type, event.severity);
               return (
-                <motion.div
+                <motion.button
                   key={event.id}
+                  type="button"
+                  onClick={() => onEventSelect?.(event.siteId)}
                   initial={{ opacity: 0, x: -12, height: 0 }}
                   animate={{ opacity: 1, x: 0, height: "auto" }}
                   exit={{ opacity: 0, height: 0 }}
                   transition={{ type: "spring", stiffness: 300, damping: 28, delay: index * 0.02 }}
-                  className="rounded-lg border border-[color:var(--color-border-1)] bg-[color:var(--color-surface-1)] px-3 py-2.5"
+                  className="w-full rounded-lg border border-[color:var(--color-border-1)] bg-[color:var(--color-surface-1)] px-3 py-2.5 text-left transition hover:border-emerald-500/25 hover:bg-[color:var(--color-surface-2)]"
                 >
                   <div className="flex gap-2">
                     <Icon className={cn("mt-0.5 h-3.5 w-3.5 shrink-0", colorFor(event.severity))} />
@@ -331,7 +336,7 @@ export function MapLiveEventStream({
                       <p className="mt-0.5 text-[10px] text-foreground-muted/70">{event.timestamp}</p>
                     </div>
                   </div>
-                </motion.div>
+                </motion.button>
               );
             })}
           </AnimatePresence>

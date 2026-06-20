@@ -2,24 +2,28 @@
 
 import dynamic from "next/dynamic";
 import Link from "next/link";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { MapPin, Satellite } from "lucide-react";
+import { Globe2, MapPin, Satellite } from "lucide-react";
 
 import { AmbientGlow } from "@/components/effects/AmbientGlow";
 import { FloatingParticles } from "@/components/effects/FloatingParticles";
+import type { MapLibreIndiaMapHandle } from "@/components/map/MapLibreIndiaMap";
 import {
   MapIntelligenceDrawer,
   MapLiveEventStream,
 } from "@/components/map/MapIntelligenceDrawer";
 import { MapLayerControls } from "@/components/map/MapLayerControls";
+import { MapSiteMetricsCard, MapSiteNavigator } from "@/components/map/MapSiteNavigator";
 import { Badge } from "@/components/ui/badge";
 import { GlassPanel } from "@/components/ui/glass-panel";
 import { Button } from "@/components/ui/button";
 import { mapSites, type MapSite } from "@/lib/data/intelligence-mock";
 import {
+  DEFAULT_ACTIVE_LAYERS,
   generateLiveEvent,
   INITIAL_LIVE_EVENTS,
+  toggleLayer,
   type LiveMapEvent,
   type MapLayerId,
 } from "@/lib/data/map-intelligence";
@@ -44,8 +48,9 @@ interface MapExplorerProps {
 }
 
 export function MapExplorer({ embedded = false }: MapExplorerProps) {
+  const mapRef = useRef<MapLibreIndiaMapHandle>(null);
   const [selectedId, setSelectedId] = useState(mapSites[0].id);
-  const [activeLayer, setActiveLayer] = useState<MapLayerId>("risk");
+  const [activeLayers, setActiveLayers] = useState<MapLayerId[]>(DEFAULT_ACTIVE_LAYERS);
   const [drawerOpen, setDrawerOpen] = useState(!embedded);
   const [mapReady, setMapReady] = useState(!embedded);
   const [liveEvents, setLiveEvents] = useState<LiveMapEvent[]>(INITIAL_LIVE_EVENTS);
@@ -69,6 +74,15 @@ export function MapExplorer({ embedded = false }: MapExplorerProps) {
     setSelectedId(site.id);
     setDrawerOpen(true);
   }, []);
+
+  const handleToggleLayer = useCallback((layer: MapLayerId) => {
+    setActiveLayers((prev) => toggleLayer(prev, layer));
+  }, []);
+
+  const handleEventSelect = useCallback((siteId: string) => {
+    const site = mapSites.find((s) => s.id === siteId);
+    if (site) handleSelect(site);
+  }, [handleSelect]);
 
   useEffect(() => {
     if (!embedded) return;
@@ -104,8 +118,9 @@ export function MapExplorer({ embedded = false }: MapExplorerProps) {
 
       {mapReady ? (
         <MapLibreIndiaMap
+          ref={mapRef}
           sites={mapSites}
-          activeLayer={activeLayer}
+          activeLayers={activeLayers}
           selectedId={selectedId}
           onSelect={handleSelect}
           enableFlyTo={!embedded}
@@ -136,23 +151,53 @@ export function MapExplorer({ embedded = false }: MapExplorerProps) {
               <p className="text-xs text-foreground-muted md:text-sm">
                 Real-time environmental monitoring across India — powered by PrithviQ AI
               </p>
-              <div className="mt-1 flex flex-wrap gap-2">
+              <div className="mt-1 flex flex-wrap items-center gap-2">
                 <Badge variant="ai">{stats.total} Sites</Badge>
                 <Badge variant="danger">{stats.critical} Critical</Badge>
                 <Badge variant="warning">{stats.highRisk} High Risk</Badge>
                 <Badge variant="success">{stats.activeMissions} Active Missions</Badge>
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  className="ml-auto h-7 px-2.5 text-[11px]"
+                  onClick={() => mapRef.current?.fitAllSites()}
+                >
+                  <Globe2 className="mr-1 h-3 w-3" />
+                  Fit India
+                </Button>
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  className="h-7 px-2.5 text-[11px]"
+                  onClick={() => mapRef.current?.resetView()}
+                >
+                  Reset View
+                </Button>
               </div>
             </GlassPanel>
           </motion.div>
 
           <MapLayerControls
-            activeLayer={activeLayer}
-            onLayerChange={setActiveLayer}
-            className="absolute left-4 top-[11.5rem] z-20 md:left-6 md:top-48"
+            activeLayers={activeLayers}
+            onToggleLayer={handleToggleLayer}
+            className="absolute left-4 top-[13rem] z-20 md:left-6 md:top-[13.5rem]"
+          />
+
+          <MapSiteNavigator
+            sites={mapSites}
+            selectedId={selectedId}
+            onSelect={handleSelect}
+            className="absolute bottom-4 left-1/2 z-20 -translate-x-1/2 md:bottom-6"
+          />
+
+          <MapSiteMetricsCard
+            site={selectedSite}
+            className="absolute left-4 z-20 hidden lg:block lg:top-[calc(13rem+17.5rem)] xl:left-6"
           />
 
           <MapLiveEventStream
             events={liveEvents}
+            onEventSelect={handleEventSelect}
             className="absolute bottom-4 left-4 z-20 md:bottom-6 md:left-6"
           />
 
@@ -171,7 +216,7 @@ export function MapExplorer({ embedded = false }: MapExplorerProps) {
               className="pointer-events-auto absolute right-4 top-4 z-20 flex items-center gap-2 rounded-xl border border-[color:var(--color-border-1)] bg-[color:var(--color-surface-1)]/90 px-4 py-2.5 text-sm backdrop-blur-xl transition hover:border-emerald-500/30 md:right-6 md:top-6"
             >
               <MapPin className="h-4 w-4 text-emerald-400" />
-              {selectedSite.label}
+              {selectedSite.city}
             </motion.button>
           ) : null}
         </>

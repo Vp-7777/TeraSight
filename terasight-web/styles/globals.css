@@ -345,6 +345,10 @@ body {
     linear-gradient(180deg, rgba(6, 8, 15, 0.35) 0%, transparent 18%, transparent 82%, rgba(6, 8, 15, 0.45) 100%);
 }
 
+.map-scan-overlay {
+  mix-blend-mode: screen;
+}
+
 .maplibregl-pulse-marker {
   position: relative;
   display: flex;
