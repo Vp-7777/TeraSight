@@ -46,12 +46,14 @@ export const MAP_LAYERS: MapLayerConfig[] = [
   },
 ];
 
+export const DEFAULT_ACTIVE_LAYERS: MapLayerId[] = ["risk", "plastic"];
+
 export const INITIAL_LIVE_EVENTS: LiveMapEvent[] = [
   {
     id: "evt-1",
     type: "hotspot",
     siteId: "yamuna-river",
-    siteLabel: "Yamuna River Plastic Hotspot",
+    siteLabel: "Yamuna River",
     message: "New waste hotspot detected near Okhla Barrage — 4.2 kg plastic cluster",
     timestamp: "Just now",
     severity: "critical",
@@ -60,7 +62,7 @@ export const INITIAL_LIVE_EVENTS: LiveMapEvent[] = [
     id: "evt-2",
     type: "mission",
     siteId: "sabarmati-river",
-    siteLabel: "Sabarmati River Cleanup",
+    siteLabel: "Sabarmati River",
     message: "Mission completed: Phase 2 embankment sweep — 680 kg removed",
     timestamp: "6 min ago",
     severity: "success",
@@ -69,7 +71,7 @@ export const INITIAL_LIVE_EVENTS: LiveMapEvent[] = [
     id: "evt-3",
     type: "risk",
     siteId: "delhi-ncr",
-    siteLabel: "Delhi NCR Yamuna Belt",
+    siteLabel: "Delhi",
     message: "Risk score increased from 76 to 79 — foam layer expansion detected",
     timestamp: "14 min ago",
     severity: "warning",
@@ -78,7 +80,7 @@ export const INITIAL_LIVE_EVENTS: LiveMapEvent[] = [
     id: "evt-4",
     type: "scan",
     siteId: "surat-tapi",
-    siteLabel: "Surat Tapi River Corridor",
+    siteLabel: "Surat",
     message: "Drone scan completed — 24.8 kg waste classified across 3 zones",
     timestamp: "22 min ago",
     severity: "info",
@@ -87,7 +89,7 @@ export const INITIAL_LIVE_EVENTS: LiveMapEvent[] = [
     id: "evt-5",
     type: "hotspot",
     siteId: "mumbai-mithi",
-    siteLabel: "Mumbai Mithi River Basin",
+    siteLabel: "Mumbai",
     message: "New waste hotspot detected at Bandra-Kurla Complex outfall",
     timestamp: "31 min ago",
     severity: "warning",
@@ -96,7 +98,7 @@ export const INITIAL_LIVE_EVENTS: LiveMapEvent[] = [
     id: "evt-6",
     type: "mission",
     siteId: "rajkot-aji",
-    siteLabel: "Rajkot Aji River Monitoring",
+    siteLabel: "Rajkot",
     message: "Mission completed: Textile waste interception — 420 kg recovered",
     timestamp: "48 min ago",
     severity: "success",
@@ -107,35 +109,35 @@ const EVENT_TEMPLATES: Omit<LiveMapEvent, "id" | "timestamp">[] = [
   {
     type: "hotspot",
     siteId: "yamuna-river",
-    siteLabel: "Yamuna River Plastic Hotspot",
+    siteLabel: "Yamuna River",
     message: "New waste hotspot detected — microplastic density spike",
     severity: "critical",
   },
   {
     type: "risk",
     siteId: "surat-tapi",
-    siteLabel: "Surat Tapi River Corridor",
+    siteLabel: "Surat",
     message: "Risk score increased — industrial runoff detected upstream",
     severity: "warning",
   },
   {
     type: "mission",
     siteId: "mumbai-mithi",
-    siteLabel: "Mumbai Mithi River Basin",
+    siteLabel: "Mumbai",
     message: "Mission completed — embankment cleanup phase finished",
     severity: "success",
   },
   {
     type: "scan",
     siteId: "ahmedabad-urban",
-    siteLabel: "Ahmedabad Urban Waste Grid",
+    siteLabel: "Ahmedabad",
     message: "Satellite pass completed — 12 new detection polygons mapped",
     severity: "info",
   },
   {
     type: "hotspot",
     siteId: "delhi-ncr",
-    siteLabel: "Delhi NCR Yamuna Belt",
+    siteLabel: "Delhi",
     message: "New waste hotspot detected near Wazirabad stretch",
     severity: "warning",
   },
@@ -168,7 +170,19 @@ export function layerWeight(site: MapSite, layer: MapLayerId): number {
   }
 }
 
-export function sitesToGeoJSON(sites: MapSite[], activeLayer: MapLayerId) {
+export function combinedLayerWeight(site: MapSite, activeLayers: MapLayerId[]): number {
+  if (activeLayers.length === 0) return 0;
+  const total = activeLayers.reduce((sum, layer) => sum + layerWeight(site, layer), 0);
+  return total / activeLayers.length;
+}
+
+export function primaryHeatmapLayer(activeLayers: MapLayerId[]): MapLayerId {
+  if (activeLayers.includes("risk")) return "risk";
+  return activeLayers[0] ?? "risk";
+}
+
+export function sitesToGeoJSON(sites: MapSite[], activeLayers: MapLayerId[]) {
+  const heatLayer = primaryHeatmapLayer(activeLayers);
   return {
     type: "FeatureCollection" as const,
     features: sites.map((site) => ({
@@ -179,7 +193,9 @@ export function sitesToGeoJSON(sites: MapSite[], activeLayer: MapLayerId) {
       },
       properties: {
         id: site.id,
-        weight: layerWeight(site, activeLayer),
+        weight: activeLayers.length > 1
+          ? combinedLayerWeight(site, activeLayers)
+          : layerWeight(site, heatLayer),
         risk: site.risk,
         plastic: site.plasticKg,
         carbon: site.carbonRecoveryPct,
@@ -187,4 +203,12 @@ export function sitesToGeoJSON(sites: MapSite[], activeLayer: MapLayerId) {
       },
     })),
   };
+}
+
+export function toggleLayer(activeLayers: MapLayerId[], layer: MapLayerId): MapLayerId[] {
+  if (activeLayers.includes(layer)) {
+    const next = activeLayers.filter((l) => l !== layer);
+    return next.length === 0 ? [layer] : next;
+  }
+  return [...activeLayers, layer];
 }
