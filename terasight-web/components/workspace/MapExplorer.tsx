@@ -4,7 +4,7 @@ import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { Globe2, MapPin, Satellite } from "lucide-react";
+import { Globe2, MapPin, Pause, Play, Satellite } from "lucide-react";
 
 import { AmbientGlow } from "@/components/effects/AmbientGlow";
 import { FloatingParticles } from "@/components/effects/FloatingParticles";
@@ -54,6 +54,16 @@ export function MapExplorer({ embedded = false }: MapExplorerProps) {
   const [drawerOpen, setDrawerOpen] = useState(!embedded);
   const [mapReady, setMapReady] = useState(!embedded);
   const [liveEvents, setLiveEvents] = useState<LiveMapEvent[]>(INITIAL_LIVE_EVENTS);
+  const [playback, setPlayback] = useState(false);
+
+  useEffect(() => {
+    if (embedded) return;
+    const siteParam = new URLSearchParams(window.location.search).get("site");
+    if (siteParam && mapSites.some((s) => s.id === siteParam)) {
+      setSelectedId(siteParam);
+      setDrawerOpen(true);
+    }
+  }, [embedded]);
 
   const selectedSite = useMemo(
     () => mapSites.find((s) => s.id === selectedId) ?? mapSites[0],
@@ -89,6 +99,19 @@ export function MapExplorer({ embedded = false }: MapExplorerProps) {
     const timer = window.setTimeout(() => setMapReady(true), 600);
     return () => window.clearTimeout(timer);
   }, [embedded]);
+
+  useEffect(() => {
+    if (!playback || embedded) return;
+    const interval = window.setInterval(() => {
+      setSelectedId((current) => {
+        const idx = mapSites.findIndex((s) => s.id === current);
+        const next = mapSites[(idx + 1) % mapSites.length];
+        setDrawerOpen(true);
+        return next.id;
+      });
+    }, 6000);
+    return () => window.clearInterval(interval);
+  }, [playback, embedded]);
 
   useEffect(() => {
     if (embedded) return;
@@ -160,6 +183,15 @@ export function MapExplorer({ embedded = false }: MapExplorerProps) {
                   variant="secondary"
                   size="sm"
                   className="ml-auto h-7 px-2.5 text-[11px]"
+                  onClick={() => setPlayback((p) => !p)}
+                >
+                  {playback ? <Pause className="mr-1 h-3 w-3" /> : <Play className="mr-1 h-3 w-3" />}
+                  {playback ? "Pause" : "Playback"}
+                </Button>
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  className="h-7 px-2.5 text-[11px]"
                   onClick={() => mapRef.current?.fitAllSites()}
                 >
                   <Globe2 className="mr-1 h-3 w-3" />

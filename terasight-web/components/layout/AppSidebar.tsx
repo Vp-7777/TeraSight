@@ -1,5 +1,6 @@
 "use client";
 
+import { motion } from "framer-motion";
 import {
   Bot,
   ChevronDown,
@@ -41,11 +42,13 @@ export function AppSidebar({ collapsed, onToggle }: AppSidebarProps) {
   const [activeWorkspace, setActiveWorkspace] = useState(workspaces[0]);
 
   return (
-    <aside
+    <motion.aside
+      layout
       className={cn(
-        "glass-panel surface-border-gradient relative z-20 flex h-[calc(100vh-1.5rem)] shrink-0 flex-col rounded-[var(--radius-xl)] border border-[color:var(--color-border-1)] bg-[color:var(--color-surface-1)] shadow-[var(--shadow-2)] backdrop-blur-2xl transition-[width] duration-300",
+        "glass-panel surface-border-gradient relative z-20 flex h-[calc(100vh-1.5rem)] shrink-0 flex-col rounded-[var(--radius-xl)] border border-[color:var(--color-border-1)] bg-[color:var(--color-surface-1)]/80 shadow-[var(--shadow-2)] backdrop-blur-2xl",
         collapsed ? "w-[76px]" : "w-[248px]",
       )}
+      transition={{ type: "spring", stiffness: 300, damping: 30 }}
     >
       {/* Header */}
       <div className="flex items-center justify-between border-b border-[color:var(--color-border-1)] p-3">
@@ -150,11 +153,13 @@ export function AppSidebar({ collapsed, onToggle }: AppSidebarProps) {
 
           return (
             <Link key={item.href} href={item.href}>
-              <div
+              <motion.div
+                whileHover={{ x: collapsed ? 0 : 4 }}
+                whileTap={{ scale: 0.98 }}
                 className={cn(
                   "group relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition",
                   active
-                    ? "bg-[color:var(--color-nav-active-bg)] text-[color:var(--color-nav-active-text)]"
+                    ? "bg-[color:var(--color-nav-active-bg)] text-[color:var(--color-nav-active-text)] shadow-[inset_0_0_0_1px_rgba(52,211,153,0.15)]"
                     : "text-foreground-muted hover:bg-[color:var(--color-surface-2)] hover:text-foreground",
                   collapsed && "justify-center px-0",
                 )}
@@ -173,7 +178,7 @@ export function AppSidebar({ collapsed, onToggle }: AppSidebarProps) {
                     ) : null}
                   </span>
                 ) : null}
-              </div>
+              </motion.div>
             </Link>
           );
         })}
@@ -232,6 +237,6 @@ export function AppSidebar({ collapsed, onToggle }: AppSidebarProps) {
           </button>
         </div>
       </div>
-    </aside>
+    </motion.aside>
   );
 }

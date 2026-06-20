@@ -23,7 +23,7 @@ const CommandGlobe = dynamic(() => import("@/components/three/CommandGlobe"), {
     <div className="flex h-full w-full items-center justify-center">
       <div className="space-y-3 text-center">
         <div className="mx-auto h-12 w-12 rounded-full skeleton-shimmer" />
-        <p className="text-sm text-foreground-muted">Initializing globe intelligence...</p>
+        <p className="text-sm text-foreground-muted">Initializing planetary intelligence...</p>
       </div>
     </div>
   ),
@@ -39,6 +39,7 @@ const cardPositions = [
 export function GlobeCommandCenter() {
   const router = useRouter();
   const [paused, setPaused] = useState(false);
+  const [hoveredMetric, setHoveredMetric] = useState<string | null>(null);
 
   const markers: GlobeMarker[] = useMemo(
     () =>
@@ -54,12 +55,25 @@ export function GlobeCommandCenter() {
 
   return (
     <div
-      className="relative h-[calc(100vh-4rem)] min-h-[600px] overflow-hidden rounded-2xl border border-[color:var(--color-border-1)] bg-[color:var(--color-surface-0)]"
+      className="relative h-[calc(100vh-4rem)] min-h-[600px] overflow-hidden rounded-2xl border border-[color:var(--color-border-1)] bg-[#020408]"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_20%_20%,rgba(16,185,129,0.08),transparent_50%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_80%_80%,rgba(56,189,248,0.06),transparent_50%)]" />
+        <div
+          className="absolute inset-0 opacity-30"
+          style={{
+            backgroundImage: "radial-gradient(circle at 50% 50%, transparent 20%, #020408 70%)",
+            transform: paused ? "scale(1.02)" : "scale(1)",
+            transition: "transform 1.2s ease",
+          }}
+        />
+      </div>
+
       <AmbientGlow variant="mixed" />
-      <FloatingParticles count={32} />
+      <FloatingParticles count={40} />
 
       <div className="absolute inset-0">
         <CommandGlobe
@@ -71,11 +85,11 @@ export function GlobeCommandCenter() {
         />
       </div>
 
-      <div className="pointer-events-none absolute inset-0 overflow-hidden opacity-30">
+      <div className="pointer-events-none absolute inset-0 overflow-hidden opacity-25">
         <div className="scan-line absolute inset-x-0 h-32" />
       </div>
 
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,_transparent_30%,_#020408_75%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,_transparent_25%,_#020408_78%)]" />
 
       <motion.div
         variants={staggerContainer}
@@ -89,7 +103,7 @@ export function GlobeCommandCenter() {
               <Globe2 className="h-5 w-5" />
             </div>
             <div>
-              <p className="text-xs uppercase tracking-[0.2em] text-accent">India Command</p>
+              <p className="text-xs uppercase tracking-[0.2em] text-accent">Planetary Intelligence</p>
               <h1 className="text-xl font-semibold text-white">Environmental Intelligence Globe</h1>
             </div>
           </div>
@@ -113,30 +127,53 @@ export function GlobeCommandCenter() {
             key={metric.id}
             variants={fadeInUp}
             className={`pointer-events-auto absolute z-20 ${cardPositions[index]}`}
+            onHoverStart={() => setHoveredMetric(metric.id)}
+            onHoverEnd={() => setHoveredMetric(null)}
           >
-            <GlassPanel className="w-52 border-[color:var(--color-border-1)] bg-[color:var(--color-surface-2)]/80 p-4 backdrop-blur-xl">
-              <div className="flex items-center justify-between">
-                <p className="text-xs text-foreground-muted">{metric.label}</p>
-                <Satellite className="h-3.5 w-3.5 text-sky-400/60" />
-              </div>
-              <p className="mt-2 text-2xl font-semibold text-white">{metric.value}</p>
-              <p
-                className={`mt-1 flex items-center gap-1 text-xs ${
-                  metric.positive ? "text-emerald-400" : "text-amber-400"
-                }`}
+            <motion.div
+              animate={{
+                y: hoveredMetric === metric.id ? -6 : 0,
+                scale: hoveredMetric === metric.id ? 1.03 : 1,
+              }}
+              transition={{ type: "spring", stiffness: 300, damping: 22 }}
+            >
+              <GlassPanel
+                glow={hoveredMetric === metric.id ? "emerald" : "none"}
+                border="gradient"
+                className="w-52 border-[color:var(--color-border-1)] bg-[color:var(--color-surface-2)]/70 p-4 backdrop-blur-xl"
               >
-                <TrendingUp className="h-3 w-3" />
-                {metric.change}
-              </p>
-            </GlassPanel>
+                <div className="flex items-center justify-between">
+                  <p className="text-xs text-foreground-muted">{metric.label}</p>
+                  <Satellite className="h-3.5 w-3.5 text-sky-400/60" />
+                </div>
+                <p className="mt-2 text-2xl font-semibold text-white">{metric.value}</p>
+                <p
+                  className={`mt-1 flex items-center gap-1 text-xs ${
+                    metric.positive ? "text-emerald-400" : "text-amber-400"
+                  }`}
+                >
+                  <TrendingUp className="h-3 w-3" />
+                  {metric.change}
+                </p>
+                {hoveredMetric === metric.id ? (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    className="mt-2 border-t border-[color:var(--color-border-1)] pt-2 text-[10px] text-foreground-muted"
+                  >
+                    Satellite pass · Updated 4 min ago
+                  </motion.div>
+                ) : null}
+              </GlassPanel>
+            </motion.div>
           </motion.div>
         ))}
       </motion.div>
 
       <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 bg-gradient-to-t from-[#020408] via-[#020408]/80 to-transparent p-6 pt-16">
         <p className="text-center text-sm text-foreground-muted">
-          PrithviQ AI satellite intelligence · 87 sites monitored across India · Hover to pause ·
-          Click markers to open Map Explorer
+          PrithviQ AI planetary intelligence · 7 priority sites · Satellite orbits active · Click markers
+          for Map Explorer
         </p>
       </div>
     </div>

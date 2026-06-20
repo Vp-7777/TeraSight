@@ -4,6 +4,11 @@ import { motion } from "framer-motion";
 import { Building2, MapPin, ScanSearch, Target } from "lucide-react";
 
 import { AmbientGlow } from "@/components/effects/AmbientGlow";
+import {
+  BenchmarkPanel,
+  NationalNetworkGraph,
+  PerformanceLeaderboard,
+} from "@/components/experience/OrganizationModules";
 import { RecentProjectsWidget } from "@/components/workspace/RecentProjectsWidget";
 import { Badge } from "@/components/ui/badge";
 import { GlassPanel } from "@/components/ui/glass-panel";
@@ -28,6 +33,18 @@ export function OrganizationsHub() {
           across partner organizations.
         </p>
       </motion.div>
+
+      <div className="grid gap-5 lg:grid-cols-3">
+        <motion.div variants={fadeInUp}>
+          <PerformanceLeaderboard />
+        </motion.div>
+        <motion.div variants={fadeInUp}>
+          <NationalNetworkGraph />
+        </motion.div>
+        <motion.div variants={fadeInUp}>
+          <BenchmarkPanel />
+        </motion.div>
+      </div>
 
       <div className="grid gap-5 lg:grid-cols-2 xl:grid-cols-3">
         {organizations.map((org, index) => (

@@ -1,33 +1,20 @@
 "use client";
 
 import { motion } from "framer-motion";
-import {
-  Activity,
-  AlertTriangle,
-  Brain,
-  Cpu,
-  Lightbulb,
-  Sparkles,
-} from "lucide-react";
+import { Activity, Sparkles } from "lucide-react";
 
 import { AmbientGlow } from "@/components/effects/AmbientGlow";
+import {
+  AnomalyDetection,
+  PredictionEngine,
+  RiskMatrix,
+  StrategicRecommendations,
+} from "@/components/experience/IntelligenceModules";
 import { AiInsightsWidget } from "@/components/workspace/AiInsightsWidget";
 import { Badge } from "@/components/ui/badge";
 import { GlassPanel } from "@/components/ui/glass-panel";
-import {
-  activityFeed,
-  aiModels,
-  aiTimeline,
-} from "@/lib/data/intelligence-mock";
+import { activityFeed, confidenceAnalytics } from "@/lib/data/intelligence-mock";
 import { fadeInUp, staggerContainer } from "@/lib/motion";
-import { cn } from "@/lib/utils";
-
-const timelineIcons = {
-  detection: Brain,
-  alert: AlertTriangle,
-  mission: Activity,
-  model: Cpu,
-};
 
 export function IntelligenceCenter() {
   return (
@@ -54,108 +41,31 @@ export function IntelligenceCenter() {
 
       <div className="grid gap-6 xl:grid-cols-12">
         <motion.div variants={fadeInUp} className="space-y-6 xl:col-span-4">
-          <GlassPanel className="overflow-hidden">
-            <div className="border-b border-[color:var(--color-border-1)] px-5 py-4">
-              <p className="font-medium">AI Event Timeline</p>
-            </div>
-            <div className="relative space-y-0 p-5">
-              <div className="absolute bottom-4 left-[27px] top-4 w-px bg-[color:var(--color-surface-2)]" />
-              {aiTimeline.map((event, index) => {
-                const Icon = timelineIcons[event.type];
-                return (
-                  <motion.div
-                    key={event.id}
-                    initial={{ opacity: 0, x: -12 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: index * 0.08 }}
-                    className="relative flex gap-4 pb-6 last:pb-0"
-                  >
-                    <div className="relative z-10 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-sky-500/15 text-sky-300">
-                      <Icon className="h-4 w-4" />
-                    </div>
-                    <div>
-                      <p className="text-xs text-foreground-muted">{event.time}</p>
-                      <p className="text-sm font-medium">{event.title}</p>
-                      <p className="mt-0.5 text-sm text-foreground-muted">{event.description}</p>
-                    </div>
-                  </motion.div>
-                );
-              })}
-            </div>
-          </GlassPanel>
-
-          <GlassPanel className="overflow-hidden">
-            <div className="border-b border-[color:var(--color-border-1)] px-5 py-4">
-              <p className="font-medium">Active AI Models</p>
-            </div>
-            <div className="space-y-3 p-4">
-              {aiModels.map((model, index) => (
-                <motion.div
-                  key={model.id}
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.06 }}
-                  className="rounded-xl border border-[color:var(--color-border-1)] bg-[color:var(--color-surface-1)] p-4"
-                >
-                  <div className="flex items-start justify-between">
-                    <div>
-                      <p className="text-sm font-medium">{model.name}</p>
-                      <p className="text-xs text-foreground-muted">v{model.version}</p>
-                    </div>
-                    <Badge
-                      variant={model.status === "active" ? "success" : "default"}
-                    >
-                      {model.status}
-                    </Badge>
-                  </div>
-                  <div className="mt-3 flex gap-4 text-xs text-foreground-muted">
-                    <span>{model.accuracy}% accuracy</span>
-                    <span>{model.latencyMs}ms latency</span>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </GlassPanel>
+          <RiskMatrix />
+          <PredictionEngine />
+          <AnomalyDetection />
         </motion.div>
 
-        <motion.div variants={fadeInUp} className="xl:col-span-5">
+        <motion.div variants={fadeInUp} className="xl:col-span-5 space-y-6">
           <AiInsightsWidget limit={6} />
-          <GlassPanel className="mt-6 p-5">
-            <div className="mb-4 flex items-center gap-2">
-              <Lightbulb className="h-4 w-4 text-amber-300" />
-              <p className="font-medium">Environmental Alerts</p>
-            </div>
-            <div className="space-y-3">
-              {[
-                {
-                  level: "Critical",
-                  text: "Plastic concentration exceeds threshold at River B-12",
-                  variant: "danger" as const,
-                },
-                {
-                  level: "Warning",
-                  text: "ERI rising at Wetland Reserve W-07 over 7-day window",
-                  variant: "warning" as const,
-                },
-                {
-                  level: "Info",
-                  text: "Carbon recovery opportunity identified at Drain D-03",
-                  variant: "ai" as const,
-                },
-              ].map((alert) => (
-                <div
-                  key={alert.text}
-                  className={cn(
-                    "rounded-xl border px-4 py-3",
-                    alert.variant === "danger" && "border-rose-500/20 bg-rose-500/5",
-                    alert.variant === "warning" && "border-amber-500/20 bg-amber-500/5",
-                    alert.variant === "ai" && "border-sky-500/20 bg-sky-500/5",
-                  )}
-                >
-                  <Badge variant={alert.variant} className="mb-2">
-                    {alert.level}
-                  </Badge>
-                  <p className="text-sm text-foreground-muted">{alert.text}</p>
+          <StrategicRecommendations />
+          <GlassPanel className="p-5">
+            <p className="mb-3 text-sm font-medium">AI Confidence Analytics</p>
+            <div className="space-y-2">
+              {confidenceAnalytics.map((item, i) => (
+                <div key={item.range}>
+                  <div className="mb-1 flex justify-between text-xs">
+                    <span>{item.range}</span>
+                    <span>{item.value}%</span>
+                  </div>
+                  <div className="h-1.5 overflow-hidden rounded-full bg-[color:var(--color-surface-2)]">
+                    <motion.div
+                      className="h-full rounded-full bg-gradient-to-r from-sky-500 to-emerald-400"
+                      initial={{ width: 0 }}
+                      animate={{ width: `${item.value}%` }}
+                      transition={{ delay: i * 0.08, duration: 0.5 }}
+                    />
+                  </div>
                 </div>
               ))}
             </div>
