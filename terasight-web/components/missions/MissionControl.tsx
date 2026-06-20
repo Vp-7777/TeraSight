@@ -4,6 +4,11 @@ import { motion } from "framer-motion";
 import { Leaf, Plus, Target, Trash2, Users } from "lucide-react";
 
 import { AmbientGlow } from "@/components/effects/AmbientGlow";
+import {
+  BudgetImpactTracker,
+  DroneDeploymentTracker,
+  MissionLifecycleTimeline,
+} from "@/components/experience/MissionModules";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { GlassPanel } from "@/components/ui/glass-panel";
@@ -63,6 +68,19 @@ export function MissionControl() {
           Create Mission
         </Button>
       </motion.div>
+
+      <motion.div variants={fadeInUp}>
+        <MissionLifecycleTimeline />
+      </motion.div>
+
+      <div className="grid gap-4 lg:grid-cols-2">
+        <motion.div variants={fadeInUp}>
+          <DroneDeploymentTracker />
+        </motion.div>
+        <motion.div variants={fadeInUp}>
+          <BudgetImpactTracker />
+        </motion.div>
+      </div>
 
       <div className="grid gap-4 sm:grid-cols-3">
         {[

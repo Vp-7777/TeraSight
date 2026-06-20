@@ -9,9 +9,12 @@ import {
   Upload,
   ZoomIn,
 } from "lucide-react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
-import { AiAnalysisProgress } from "@/components/workspace/AiAnalysisProgress";
+import {
+  JarvisAnalysisPipeline,
+  STREAMING_INSIGHTS,
+} from "@/components/experience/JarvisAnalysisPipeline";
 import { AiInsightsWidget } from "@/components/workspace/AiInsightsWidget";
 import { ReportPreview } from "@/components/workspace/ReportPreview";
 import { Badge } from "@/components/ui/badge";
@@ -50,6 +53,35 @@ export function AnalysisWorkspace() {
     handleAnalyze,
     acceptedTypes,
   } = useImageAnalysis();
+
+  const [streamingInsight, setStreamingInsight] = useState("");
+  const [insightIndex, setInsightIndex] = useState(0);
+
+  useEffect(() => {
+    if (!isAnalyzing) {
+      setStreamingInsight("");
+      setInsightIndex(0);
+      return;
+    }
+    const interval = window.setInterval(() => {
+      setInsightIndex((i) => {
+        const next = (i + 1) % STREAMING_INSIGHTS.length;
+        setStreamingInsight(STREAMING_INSIGHTS[next]);
+        return next;
+      });
+    }, 1400);
+    setStreamingInsight(STREAMING_INSIGHTS[0]);
+    return () => window.clearInterval(interval);
+  }, [isAnalyzing]);
+
+  const jarvisStage =
+    stage === "uploading"
+      ? "ingest"
+      : stage === "scanning"
+        ? "detect"
+        : stage === "classifying"
+          ? "classify"
+          : "score";
 
   return (
     <div className="grid gap-5 xl:grid-cols-[280px_minmax(0,1fr)_360px]">
@@ -207,7 +239,12 @@ export function AnalysisWorkspace() {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0 }}
             >
-              <AiAnalysisProgress progress={progress} stage={stage} compact />
+              <JarvisAnalysisPipeline
+                active={isAnalyzing}
+                currentStage={jarvisStage}
+                progress={progress}
+                streamingInsight={streamingInsight}
+              />
             </motion.div>
           ) : analysisResult ? (
             <motion.div
