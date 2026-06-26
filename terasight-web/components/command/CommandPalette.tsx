@@ -44,6 +44,7 @@ export function CommandPalette() {
 
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
+      if (!e.key) return;
       const isK = e.key.toLowerCase() === "k";
       const modifier = e.ctrlKey || e.metaKey;
       if (modifier && isK) {
