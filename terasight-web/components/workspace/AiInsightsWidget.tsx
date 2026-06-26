@@ -4,6 +4,9 @@ import { AnimatePresence, motion } from "framer-motion";
 import { AlertCircle, Lightbulb, Sparkles, TrendingUp } from "lucide-react";
 import { useEffect, useState } from "react";
 
+import { useMemo } from "react";
+import { useSession } from "@/lib/session/session-context";
+
 import { GlassPanel } from "@/components/ui/glass-panel";
 import { aiInsights, type AiInsight } from "@/lib/data/workspace-mock";
 import { cn } from "@/lib/utils";
@@ -22,8 +25,30 @@ interface AiInsightsWidgetProps {
 }
 
 export function AiInsightsWidget({ limit = 3 }: AiInsightsWidgetProps) {
+  const { activeWorkspace } = useSession();
   const [activeIndex, setActiveIndex] = useState(0);
-  const items = aiInsights.slice(0, limit);
+
+  const items = useMemo(() => {
+    const matching = aiInsights.filter(insight => {
+      const titleLower = insight.title.toLowerCase();
+      const bodyLower = insight.body.toLowerCase();
+      const wsShortLower = activeWorkspace.short.toLowerCase();
+      const wsNameLower = activeWorkspace.name.toLowerCase();
+      
+      return titleLower.includes(wsShortLower) || 
+             bodyLower.includes(wsShortLower) ||
+             titleLower.includes(wsNameLower) ||
+             bodyLower.includes(wsNameLower) ||
+             (activeWorkspace.id === "namami" && (bodyLower.includes("yamuna") || bodyLower.includes("gange"))) ||
+             (activeWorkspace.id === "smc" && (bodyLower.includes("surat") || bodyLower.includes("vapi") || bodyLower.includes("sabarmati"))) ||
+             (activeWorkspace.id === "iitb" && (bodyLower.includes("iit") || bodyLower.includes("bombay") || bodyLower.includes("sabarmati")));
+    });
+    return matching.length > 0 ? matching.slice(0, limit) : aiInsights.slice(0, limit);
+  }, [activeWorkspace, limit]);
+
+  useEffect(() => {
+    setActiveIndex(0);
+  }, [items.length]);
 
   useEffect(() => {
     const interval = window.setInterval(() => {

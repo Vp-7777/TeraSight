@@ -4,6 +4,9 @@ import { motion } from "framer-motion";
 import { ArrowRight, Clock } from "lucide-react";
 import Link from "next/link";
 
+import { useMemo } from "react";
+import { useSession } from "@/lib/session/session-context";
+
 import { Badge } from "@/components/ui/badge";
 import { GlassPanel } from "@/components/ui/glass-panel";
 import { recentAnalyses, type RecentAnalysis } from "@/lib/data/workspace-mock";
@@ -27,7 +30,18 @@ interface RecentAnalysesWidgetProps {
 }
 
 export function RecentAnalysesWidget({ limit = 4, showViewAll = true }: RecentAnalysesWidgetProps) {
-  const items = recentAnalyses.slice(0, limit);
+  const { activeWorkspace } = useSession();
+
+  const items = useMemo(() => {
+    const matching = recentAnalyses.filter(item => 
+      item.site.toLowerCase().includes(activeWorkspace.short.toLowerCase()) ||
+      item.site.toLowerCase().includes(activeWorkspace.name.toLowerCase()) ||
+      (activeWorkspace.id === "iitb" && (item.site.includes("Vapi") || item.site.includes("Sabarmati"))) ||
+      (activeWorkspace.id === "smc" && (item.site.includes("Surat") || item.site.includes("Sabarmati") || item.site.includes("Vapi"))) ||
+      (activeWorkspace.id === "namami" && (item.site.includes("Yamuna") || item.site.includes("Sabarmati")))
+    );
+    return matching.length > 0 ? matching.slice(0, limit) : recentAnalyses.slice(0, limit);
+  }, [activeWorkspace, limit]);
 
   return (
     <GlassPanel className="overflow-hidden">
@@ -52,8 +66,13 @@ export function RecentAnalysesWidget({ limit = 4, showViewAll = true }: RecentAn
             key={item.id}
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.05 }}
-            className="flex items-center gap-4 px-5 py-4 transition hover:bg-[color:var(--color-surface-1)]"
+            whileHover={{ x: 4, backgroundColor: "rgba(255, 255, 255, 0.02)" }}
+            transition={{ 
+              delay: index * 0.05,
+              duration: 0.15,
+              ease: "easeOut"
+            }}
+            className="flex items-center gap-4 px-5 py-4 cursor-pointer transition-colors duration-150"
           >
             <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500/20 to-sky-500/10 text-xs font-semibold text-emerald-200">
               {item.risk}

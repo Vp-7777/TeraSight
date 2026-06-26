@@ -6,10 +6,11 @@ import Link from "next/link";
 
 import { Badge } from "@/components/ui/badge";
 import { GlassPanel } from "@/components/ui/glass-panel";
-import { savedAnalyses } from "@/lib/data/intelligence-mock";
+import { useSession } from "@/lib/session/session-context";
 
 export function SavedAnalysesWidget({ limit = 3 }: { limit?: number }) {
-  const items = savedAnalyses.slice(0, limit);
+  const { savedAnalysesList } = useSession();
+  const items = savedAnalysesList.slice(0, limit);
 
   return (
     <GlassPanel className="overflow-hidden">
@@ -28,8 +29,13 @@ export function SavedAnalysesWidget({ limit = 3 }: { limit?: number }) {
             key={item.id}
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.06 }}
-            className="rounded-xl border border-[color:var(--color-border-1)] bg-[color:var(--color-surface-1)] p-4 transition hover:border-emerald-500/20"
+            whileHover={{ y: -2, borderColor: "rgba(52, 211, 153, 0.22)", boxShadow: "0 4px 20px rgba(16, 185, 129, 0.04)" }}
+            transition={{ 
+              delay: index * 0.06,
+              duration: 0.2,
+              ease: "easeOut"
+            }}
+            className="rounded-xl border border-[color:var(--color-border-1)] bg-[color:var(--color-surface-1)] p-4 cursor-pointer transition-colors duration-200"
           >
             <div className="flex items-start justify-between gap-2">
               <div>

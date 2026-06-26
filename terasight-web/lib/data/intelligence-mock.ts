@@ -13,6 +13,7 @@ export interface Mission {
   carbonImpact: number;
   team: string;
   dueDate: string;
+  budgetInr?: number;
 }
 
 export interface Organization {
@@ -252,6 +253,7 @@ export const missions: Mission[] = [
     carbonImpact: 18,
     team: "12 field ops",
     dueDate: "Jun 28, 2026",
+    budgetInr: 4200000,
   },
   {
     id: "mission-2",
@@ -264,6 +266,7 @@ export const missions: Mission[] = [
     carbonImpact: 31,
     team: "18 field ops",
     dueDate: "Jul 12, 2026",
+    budgetInr: 1650000,
   },
   {
     id: "mission-3",
@@ -276,6 +279,7 @@ export const missions: Mission[] = [
     carbonImpact: 8,
     team: "6 analysts",
     dueDate: "Jul 30, 2026",
+    budgetInr: 2800000,
   },
   {
     id: "mission-4",
@@ -288,6 +292,7 @@ export const missions: Mission[] = [
     carbonImpact: 22,
     team: "9 field ops",
     dueDate: "May 30, 2026",
+    budgetInr: 3100000,
   },
 ];
 

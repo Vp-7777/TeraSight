@@ -11,7 +11,7 @@ export function AmbientGlow({ variant = "emerald" }: AmbientGlowProps) {
     <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
       <div
         className={cn(
-          "absolute -left-24 top-0 h-72 w-72 rounded-full blur-[100px]",
+          "absolute -left-24 top-0 h-72 w-72 rounded-full blur-[100px] animate-float-glow-1",
           variant === "emerald" && "bg-emerald-500/15",
           variant === "blue" && "bg-sky-500/15",
           variant === "mixed" && "bg-emerald-500/12",
@@ -19,7 +19,7 @@ export function AmbientGlow({ variant = "emerald" }: AmbientGlowProps) {
       />
       <div
         className={cn(
-          "absolute -right-24 bottom-0 h-72 w-72 rounded-full blur-[100px]",
+          "absolute -right-24 bottom-0 h-72 w-72 rounded-full blur-[100px] animate-float-glow-2",
           variant === "emerald" && "bg-teal-500/10",
           variant === "blue" && "bg-indigo-500/10",
           variant === "mixed" && "bg-sky-500/12",
