@@ -10,10 +10,11 @@ import {
   RiskMatrix,
   StrategicRecommendations,
 } from "@/components/experience/IntelligenceModules";
+import { LiveActivityFeed } from "@/components/dashboard/LiveActivityFeed";
 import { AiInsightsWidget } from "@/components/workspace/AiInsightsWidget";
 import { Badge } from "@/components/ui/badge";
 import { GlassPanel } from "@/components/ui/glass-panel";
-import { activityFeed, confidenceAnalytics } from "@/lib/data/intelligence-mock";
+import { confidenceAnalytics } from "@/lib/data/intelligence-mock";
 import { fadeInUp, staggerContainer } from "@/lib/motion";
 
 export function IntelligenceCenter() {
@@ -73,32 +74,7 @@ export function IntelligenceCenter() {
         </motion.div>
 
         <motion.div variants={fadeInUp} className="xl:col-span-3">
-          <GlassPanel className="overflow-hidden">
-            <div className="border-b border-[color:var(--color-border-1)] px-5 py-4">
-              <div className="flex items-center gap-2">
-                <Activity className="h-4 w-4 text-[color:var(--color-nav-active-text)]" />
-                <p className="font-medium">Live Activity</p>
-              </div>
-            </div>
-            <div className="divide-y divide-[color:var(--color-border-1)]">
-              {activityFeed.map((item, index) => (
-                <motion.div
-                  key={item.id}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: index * 0.1 }}
-                  className="px-5 py-4"
-                >
-                  <p className="text-sm">
-                    <span className="font-medium text-[color:var(--color-nav-active-text)]">{item.actor}</span>{" "}
-                    <span className="text-foreground-muted">{item.action}</span>{" "}
-                    <span className="font-medium">{item.target}</span>
-                  </p>
-                  <p className="mt-1 text-xs text-foreground-muted">{item.time}</p>
-                </motion.div>
-              ))}
-            </div>
-          </GlassPanel>
+          <LiveActivityFeed />
         </motion.div>
       </div>
     </motion.div>

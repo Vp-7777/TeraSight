@@ -19,36 +19,36 @@ import { useState } from "react";
 import { useAssistant } from "@/components/assistant/AssistantContext";
 import { Badge } from "@/components/ui/badge";
 import { mainNavItems } from "@/lib/constants/navigation";
-import { useSession } from "@/lib/session/session-context";
+import { useSession, WORKSPACES } from "@/lib/session/session-context";
 import { cn } from "@/lib/utils";
-
-const workspaces = [
-  { id: "smc", name: "Surat Municipal Corp", short: "SMC" },
-  { id: "namami", name: "Namami Gange Mission", short: "NGM" },
-  { id: "iitb", name: "IIT Bombay Analytics", short: "IITB" },
-];
 
 interface AppSidebarProps {
   collapsed: boolean;
   onToggle: () => void;
+  mobileOpen?: boolean;
+  onMobileClose?: () => void;
 }
 
-export function AppSidebar({ collapsed, onToggle }: AppSidebarProps) {
+export function AppSidebar({
+  collapsed,
+  onToggle,
+  mobileOpen = false,
+  onMobileClose,
+}: AppSidebarProps) {
   const pathname = usePathname();
   const { openAssistant } = useAssistant();
-  const { user, logout } = useSession();
+  const { user, logout, activeWorkspace, setActiveWorkspace } = useSession();
   const { mounted, isDark, toggleTheme } = useThemeToggle();
   const [workspaceOpen, setWorkspaceOpen] = useState(false);
-  const [activeWorkspace, setActiveWorkspace] = useState(workspaces[0]);
 
   return (
-    <motion.aside
-      layout
+    <aside
       className={cn(
-        "glass-panel surface-border-gradient relative z-20 flex h-[calc(100vh-1.5rem)] shrink-0 flex-col rounded-[var(--radius-xl)] border border-[color:var(--color-border-1)] bg-[color:var(--color-surface-1)]/80 shadow-[var(--shadow-2)] backdrop-blur-2xl",
-        collapsed ? "w-[76px]" : "w-[248px]",
+        "glass-panel surface-border-gradient flex h-[calc(100vh-1.5rem)] shrink-0 flex-col rounded-[var(--radius-xl)] border border-[color:var(--color-border-1)] bg-[color:var(--color-surface-1)]/80 shadow-[var(--shadow-2)] backdrop-blur-2xl transition-all duration-300",
+        collapsed ? "md:w-[76px]" : "md:w-[248px]",
+        "fixed inset-y-3 left-3 z-50 md:relative md:inset-0 md:z-20",
+        mobileOpen ? "translate-x-0 w-[248px]" : "-translate-x-[280px] md:translate-x-0",
       )}
-      transition={{ type: "spring", stiffness: 300, damping: 30 }}
     >
       {/* Header */}
       <div className="flex items-center justify-between border-b border-[color:var(--color-border-1)] p-3">
@@ -74,7 +74,7 @@ export function AppSidebar({ collapsed, onToggle }: AppSidebarProps) {
         <button
           type="button"
           onClick={onToggle}
-          className="flex h-8 w-8 shrink-0 items-center justify-center rounded-[var(--radius-xs)] border border-[color:var(--color-border-1)] text-foreground-muted transition hover:bg-[color:var(--color-surface-2)]"
+          className="hidden md:flex h-8 w-8 shrink-0 items-center justify-center rounded-[var(--radius-xs)] border border-[color:var(--color-border-1)] text-foreground-muted transition hover:bg-[color:var(--color-surface-2)]"
           aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
         >
           {collapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
@@ -104,7 +104,7 @@ export function AppSidebar({ collapsed, onToggle }: AppSidebarProps) {
           </button>
           {workspaceOpen ? (
             <div className="mt-1 space-y-0.5 rounded-[var(--radius-md)] border border-[color:var(--color-border-1)] bg-[color:var(--color-surface-1)] p-1 shadow-[var(--shadow-1)]">
-              {workspaces.map((ws) => (
+              {WORKSPACES.map((ws) => (
                 <button
                   key={ws.id}
                   type="button"
@@ -152,7 +152,7 @@ export function AppSidebar({ collapsed, onToggle }: AppSidebarProps) {
           const Icon = item.icon;
 
           return (
-            <Link key={item.href} href={item.href}>
+            <Link key={item.href} href={item.href} onClick={onMobileClose}>
               <motion.div
                 whileHover={{ x: collapsed ? 0 : 4 }}
                 whileTap={{ scale: 0.98 }}
@@ -237,6 +237,6 @@ export function AppSidebar({ collapsed, onToggle }: AppSidebarProps) {
           </button>
         </div>
       </div>
-    </motion.aside>
+    </aside>
   );
 }
