@@ -69,6 +69,13 @@ export function SessionProvider({ children }: { children: ReactNode }) {
       const raw = localStorage.getItem(SESSION_KEY);
       if (raw) {
         setUser(JSON.parse(raw) as SessionUser);
+        // Ensure middleware cookie is synchronized
+        if (!document.cookie.includes("terasight_session_token")) {
+          document.cookie = "terasight_session_token=authenticated; path=/; max-age=604800; SameSite=Lax";
+        }
+      } else {
+        // Clear middleware cookie if no active session
+        document.cookie = "terasight_session_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
       }
       const rawWs = localStorage.getItem(WORKSPACE_KEY);
       if (rawWs) {
@@ -85,6 +92,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
       localStorage.removeItem(SESSION_KEY);
       localStorage.removeItem(WORKSPACE_KEY);
       localStorage.removeItem(SAVED_ANALYSES_KEY);
+      document.cookie = "terasight_session_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
     }
     setHydrated(true);
   }, []);
@@ -92,6 +100,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
   const login = useCallback((partial?: Partial<SessionUser>) => {
     const nextUser = { ...DEFAULT_USER, ...partial };
     localStorage.setItem(SESSION_KEY, JSON.stringify(nextUser));
+    document.cookie = "terasight_session_token=authenticated; path=/; max-age=604800; SameSite=Lax";
     setUser(nextUser);
   }, []);
 
@@ -99,6 +108,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     localStorage.removeItem(SESSION_KEY);
     localStorage.removeItem(WORKSPACE_KEY);
     localStorage.removeItem(SAVED_ANALYSES_KEY);
+    document.cookie = "terasight_session_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
     setUser(null);
     router.push("/login");
   }, [router]);
