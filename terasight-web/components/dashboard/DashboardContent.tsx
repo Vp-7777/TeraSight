@@ -3,7 +3,9 @@
 import { motion } from "framer-motion";
 import { Globe2, MapPin, Sparkles } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import dynamic from "next/dynamic";
+import { useEffect, useState, useMemo } from "react";
+import { useSession } from "@/lib/session/session-context";
 
 import { AlertCommandCenter } from "@/components/experience/AlertCommandCenter";
 import { EnvironmentalRadarChart } from "@/components/experience/EnvironmentalRadarChart";
@@ -11,10 +13,21 @@ import { LiveEnvironmentalTicker } from "@/components/experience/LiveEnvironment
 import { LiveActivityFeed } from "@/components/dashboard/LiveActivityFeed";
 import { AiInsightsWidget } from "@/components/workspace/AiInsightsWidget";
 import { KpiCard } from "@/components/workspace/KpiCard";
-import { MapExplorer } from "@/components/workspace/MapExplorer";
 import { QuickActionsPanel } from "@/components/workspace/QuickActionsPanel";
 import { RecentAnalysesWidget } from "@/components/workspace/RecentAnalysesWidget";
 import { RecentProjectsWidget } from "@/components/workspace/RecentProjectsWidget";
+
+const MapExplorer = dynamic(
+  () => import("@/components/workspace/MapExplorer").then((m) => m.MapExplorer),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="h-full w-full flex items-center justify-center bg-[color:var(--color-surface-2)] animate-pulse rounded-lg">
+        <p className="text-sm text-foreground-muted">Loading Hotspot Map Explorer...</p>
+      </div>
+    ),
+  }
+);
 import { ReportPreview } from "@/components/workspace/ReportPreview";
 import { SavedAnalysesWidget } from "@/components/workspace/SavedAnalysesWidget";
 import { Badge } from "@/components/ui/badge";
@@ -25,8 +38,39 @@ import { formatIndianDate } from "@/lib/format/india";
 import { fadeInUp, staggerContainer } from "@/lib/motion";
 
 export function DashboardContent() {
-  const [kpis, setKpis] = useState(dashboardKpis);
+  const { activeWorkspace } = useSession();
   const [refreshing, setRefreshing] = useState(false);
+
+  const currentKpis = useMemo(() => {
+    switch (activeWorkspace.id) {
+      case "namami":
+        return [
+          { id: "eri", label: "Environmental Risk Index", value: 71, trend: "-5%", trendUp: false, icon: "risk" as const },
+          { id: "images", label: "Images Analyzed", value: 3420, trend: "+22%", trendUp: true, icon: "camera" as const },
+          { id: "sites", label: "Active Monitoring Sites", value: 28, trend: "+9", trendUp: true, icon: "sites" as const },
+          { id: "waste", label: "Estimated Waste Detected", value: 34.6, suffix: "t", decimals: 1, trend: "+8%", trendUp: true, icon: "waste" as const },
+          { id: "carbon", label: "Carbon Recovery Potential", value: 19, suffix: "%", trend: "-2%", trendUp: false, icon: "carbon" as const },
+          { id: "cost", label: "Est. Cleanup Cost", value: 52, prefix: "₹", suffix: " L", trend: "+12%", trendUp: true, icon: "cost" as const },
+        ];
+      case "iitb":
+        return [
+          { id: "eri", label: "Environmental Risk Index", value: 48, trend: "-12%", trendUp: false, icon: "risk" as const },
+          { id: "images", label: "Images Analyzed", value: 850, trend: "+8%", trendUp: true, icon: "camera" as const },
+          { id: "sites", label: "Active Monitoring Sites", value: 6, trend: "+1", trendUp: true, icon: "sites" as const },
+          { id: "waste", label: "Estimated Waste Detected", value: 12.4, suffix: "t", decimals: 1, trend: "-4%", trendUp: false, icon: "waste" as const },
+          { id: "carbon", label: "Carbon Recovery Potential", value: 45, suffix: "%", trend: "+10%", trendUp: true, icon: "carbon" as const },
+          { id: "cost", label: "Est. Cleanup Cost", value: 9.8, prefix: "₹", suffix: " L", trend: "-15%", trendUp: false, icon: "cost" as const },
+        ];
+      default: // smc
+        return dashboardKpis;
+    }
+  }, [activeWorkspace.id]);
+
+  const [kpis, setKpis] = useState(currentKpis);
+
+  useEffect(() => {
+    setKpis(currentKpis);
+  }, [currentKpis]);
 
   useEffect(() => {
     const interval = window.setInterval(() => {
@@ -73,7 +117,7 @@ export function DashboardContent() {
                 </span>
                 PrithviQ AI Active
               </Badge>
-              <Badge variant="gold">Surat Municipal Corporation</Badge>
+              <Badge variant="gold">{activeWorkspace.name}</Badge>
             </div>
             <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
               India Environmental Command Center

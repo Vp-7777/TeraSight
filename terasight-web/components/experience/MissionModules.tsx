@@ -2,7 +2,9 @@
 
 import { motion } from "framer-motion";
 import { Plane, Radio, Target, Wallet } from "lucide-react";
+import { useMemo } from "react";
 
+import { useSession } from "@/lib/session/session-context";
 import { GlassPanel } from "@/components/ui/glass-panel";
 import { indianMissions } from "@/lib/data/india-demo";
 import { formatInr } from "@/lib/data/india-demo";
@@ -48,11 +50,29 @@ export function MissionLifecycleTimeline() {
 }
 
 export function DroneDeploymentTracker() {
-  const drones = [
-    { id: "DRN-01", site: "Yamuna", battery: 78, status: "Scanning" },
-    { id: "DRN-02", site: "Surat", battery: 62, status: "Returning" },
-    { id: "DRN-03", site: "Mumbai", battery: 91, status: "Standby" },
-  ];
+  const { activeWorkspace } = useSession();
+
+  const drones = useMemo(() => {
+    switch (activeWorkspace.id) {
+      case "namami":
+        return [
+          { id: "DRN-01", site: "Yamuna Barrage", battery: 88, status: "Scanning plastic grid" },
+          { id: "DRN-04", site: "Kalindi Kunj", battery: 52, status: "Returning to base" },
+          { id: "DRN-05", site: "Okhla Outfall", battery: 94, status: "Standby" },
+        ];
+      case "iitb":
+        return [
+          { id: "DRN-03", site: "Mithi River Basin", battery: 91, status: "Standby" },
+          { id: "DRN-06", site: "IITB Lake Outfall", battery: 73, status: "Awaiting flight path" },
+        ];
+      default: // smc
+        return [
+          { id: "DRN-02", site: "Surat Tapi River", battery: 62, status: "Returning" },
+          { id: "DRN-07", site: "Pandesara Outfall", battery: 81, status: "Scanning industrial zone" },
+          { id: "DRN-08", site: "Sachin GIDC", battery: 95, status: "Standby" },
+        ];
+    }
+  }, [activeWorkspace.id]);
 
   return (
     <GlassPanel className="p-5">
@@ -82,10 +102,12 @@ export function DroneDeploymentTracker() {
   );
 }
 
-export function BudgetImpactTracker() {
-  const totalBudget = indianMissions.reduce((s, m) => s + m.budgetInr, 0);
-  const totalWaste = indianMissions.reduce((s, m) => s + m.wasteRemovedKg, 0);
-  const totalCarbon = indianMissions.reduce((s, m) => s + m.carbonImpact, 0);
+export function BudgetImpactTracker({ missions = [] }: { missions?: any[] }) {
+  const totalBudget = missions.reduce((s, m) => s + (m.budgetInr ?? 1500000), 0);
+  const totalWaste = missions.reduce((s, m) => s + m.wasteRemovedKg, 0);
+  const totalCarbon = missions.length
+    ? Math.round(missions.reduce((s, m) => s + m.carbonImpact, 0) / missions.length)
+    : 0;
 
   return (
     <GlassPanel border="gradient" className="p-5">

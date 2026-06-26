@@ -402,3 +402,30 @@ body {
     opacity: 0;
   }
 }
+
+@keyframes float-glow-1 {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(30px, -20px) scale(1.08);
+  }
+}
+
+@keyframes float-glow-2 {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(-30px, 30px) scale(0.92);
+  }
+}
+
+.animate-float-glow-1 {
+  animation: float-glow-1 12s ease-in-out infinite;
+}
+
+.animate-float-glow-2 {
+  animation: float-glow-2 15s ease-in-out infinite;
+}
+

@@ -13,7 +13,10 @@ import { formatConfidence } from "@/lib/utils";
 
 interface ReportPreviewProps {
   result?: AnalysisResult | null;
+  customData?: any;
   compact?: boolean;
+  onExport?: () => void;
+  onShare?: () => void;
 }
 
 function priorityVariant(priority: string) {
@@ -29,8 +32,16 @@ function priorityVariant(priority: string) {
   }
 }
 
-export function ReportPreview({ result, compact = false }: ReportPreviewProps) {
-  const data = result
+export function ReportPreview({
+  result,
+  customData,
+  compact = false,
+  onExport,
+  onShare,
+}: ReportPreviewProps) {
+  const data = customData
+    ? customData
+    : result
     ? {
         title: "Environmental Intelligence Assessment",
         organization: "Uploaded Analysis",
@@ -50,6 +61,21 @@ export function ReportPreview({ result, compact = false }: ReportPreviewProps) {
         recommendation: result.recommendation,
       }
     : reportPreviewMock;
+
+  const defaultExport = () => {
+    window.print();
+  };
+
+  const defaultShare = () => {
+    if (typeof navigator !== "undefined" && navigator.clipboard) {
+      navigator.clipboard.writeText(
+        `${window.location.origin}/reports/${data.analysisId || "TS-IN-SURAT-2026-0042"}`
+      );
+      alert("Report share link copied to clipboard!");
+    } else {
+      alert(`Report ID: ${data.analysisId || "TS-IN-SURAT-2026-0042"}`);
+    }
+  };
 
   return (
     <GlassPanel className="overflow-hidden" glow={result ? "emerald" : "none"}>
@@ -147,7 +173,7 @@ export function ReportPreview({ result, compact = false }: ReportPreviewProps) {
             Waste Classifications
           </p>
           <div className="space-y-2">
-            {data.detections.map((detection, index) => (
+            {data.detections.map((detection: any, index: number) => (
               <div
                 key={`${detection.class}-${index}`}
                 className="flex items-center justify-between rounded-lg border border-[color:var(--color-border-1)] px-3 py-2.5"
@@ -171,16 +197,18 @@ export function ReportPreview({ result, compact = false }: ReportPreviewProps) {
           <p className="mt-2 text-sm leading-6 text-foreground-muted">{data.recommendation}</p>
         </div>
 
-        <div className="flex flex-wrap gap-2">
-          <Button variant="secondary" size="sm">
-            <Download className="h-4 w-4" />
-            Export PDF
-          </Button>
-          <Button variant="outline" size="sm">
-            <Share2 className="h-4 w-4" />
-            Share Report
-          </Button>
-        </div>
+        {!compact && (
+          <div className="flex flex-wrap gap-2 print:hidden">
+            <Button variant="secondary" size="sm" onClick={onExport ?? defaultExport}>
+              <Download className="h-4 w-4" />
+              Export PDF
+            </Button>
+            <Button variant="outline" size="sm" onClick={onShare ?? defaultShare}>
+              <Share2 className="h-4 w-4" />
+              Share Report
+            </Button>
+          </div>
+        )}
 
         <div className="border-t border-[color:var(--color-border-1)] pt-3">
           <p className="font-mono text-[11px] text-foreground-muted">{data.analysisId}</p>

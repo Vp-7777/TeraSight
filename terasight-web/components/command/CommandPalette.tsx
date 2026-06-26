@@ -52,8 +52,18 @@ export function CommandPalette() {
       }
       if (e.key === "Escape") setOpen(false);
     };
+
+    const handleToggle = () => {
+      setOpen((v) => !v);
+    };
+
     window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
+    window.addEventListener("toggle-command-palette", handleToggle);
+
+    return () => {
+      window.removeEventListener("keydown", onKeyDown);
+      window.removeEventListener("toggle-command-palette", handleToggle);
+    };
   }, []);
 
   const items = useMemo<PaletteItem[]>(

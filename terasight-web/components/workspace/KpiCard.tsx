@@ -77,30 +77,31 @@ export function KpiCard({ metric, index = 0 }: KpiCardProps) {
 
             <svg
               viewBox="0 0 120 28"
-              className="mt-3 h-7 w-36 opacity-90"
+              className="mt-3 h-7 w-36 overflow-visible opacity-90"
               aria-hidden="true"
             >
               <defs>
                 <linearGradient id={`kpi-${metric.id}`} x1="0" y1="0" x2="1" y2="0">
-                  <stop offset="0%" stopColor="rgba(52,211,153,0.85)" />
-                  <stop offset="70%" stopColor="rgba(56,189,248,0.55)" />
-                  <stop offset="100%" stopColor="rgba(255,255,255,0.12)" />
+                  <stop offset="0%" stopColor="rgba(52,211,153,0.9)" />
+                  <stop offset="60%" stopColor="rgba(56,189,248,0.7)" />
+                  <stop offset="100%" stopColor="rgba(56,189,248,0.2)" />
                 </linearGradient>
               </defs>
-              {spark.map((v, i) => {
-                const x = (i / (spark.length - 1)) * 120;
-                const y = 26 - v * 22;
-                return (
-                  <circle
-                    key={i}
-                    cx={x}
-                    cy={y}
-                    r={i === spark.length - 1 ? 2.2 : 1.6}
-                    fill={`url(#kpi-${metric.id})`}
-                    opacity={i === spark.length - 1 ? 1 : 0.72}
-                  />
-                );
-              })}
+              <path
+                d={`M ${spark.map((v, i) => `${(i / (spark.length - 1)) * 120},${26 - v * 22}`).join(" L ")}`}
+                fill="none"
+                stroke={`url(#kpi-${metric.id})`}
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+              <circle
+                cx="120"
+                cy={26 - spark[spark.length - 1] * 22}
+                r="3"
+                fill={metric.trendUp ? "#34d399" : "#fbbf24"}
+                className="animate-pulse"
+              />
             </svg>
           </div>
           <div className="flex h-11 w-11 items-center justify-center rounded-[var(--radius-md)] border border-emerald-500/20 bg-emerald-500/10 text-[color:var(--color-nav-active-text)]">
