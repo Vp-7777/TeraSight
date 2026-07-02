@@ -4,17 +4,12 @@ import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { Globe2, MapPin, Pause, Play, Satellite } from "lucide-react";
+import { MapPin, Satellite } from "lucide-react";
 
 import { AmbientGlow } from "@/components/effects/AmbientGlow";
 import { FloatingParticles } from "@/components/effects/FloatingParticles";
 import type { MapLibreIndiaMapHandle } from "@/components/map/MapLibreIndiaMap";
-import {
-  MapIntelligenceDrawer,
-  MapLiveEventStream,
-} from "@/components/map/MapIntelligenceDrawer";
-import { MapLayerControls } from "@/components/map/MapLayerControls";
-import { MapSiteMetricsCard, MapSiteNavigator } from "@/components/map/MapSiteNavigator";
+import { MapIntelligenceDrawer } from "@/components/map/MapIntelligenceDrawer";
 import { Badge } from "@/components/ui/badge";
 import { GlassPanel } from "@/components/ui/glass-panel";
 import { Button } from "@/components/ui/button";
@@ -161,82 +156,34 @@ export function MapExplorer({ embedded = false }: MapExplorerProps) {
             initial={{ opacity: 0, y: -12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ type: "spring", stiffness: 260, damping: 24 }}
-            className="pointer-events-none absolute left-4 right-4 top-4 z-20 md:left-6 md:right-auto"
+            className="pointer-events-none absolute left-4 top-4 z-20 md:left-6"
           >
-            <GlassPanel glow="emerald" border="gradient" className="pointer-events-auto inline-flex max-w-xl flex-col gap-2 px-5 py-3">
+            <GlassPanel glow="emerald" border="gradient" className="pointer-events-auto inline-flex flex-col gap-1 px-4 py-2.5">
               <div className="flex items-center gap-2">
                 <Satellite className="h-4 w-4 text-emerald-400" />
-                <p className="text-[11px] font-medium uppercase tracking-wider text-emerald-400">
-                  Geospatial Intelligence
-                </p>
+                <h1 className="text-sm font-semibold">Map Explorer</h1>
+                <Badge variant="ai" className="px-1 py-0 text-[9px]">{stats.total} Sites</Badge>
               </div>
-              <h1 className="text-lg font-semibold md:text-xl">Map Explorer</h1>
-              <p className="text-xs text-foreground-muted md:text-sm">
-                Real-time environmental monitoring across India — powered by PrithviQ AI
+              <p className="text-[10px] text-foreground-muted">
+                Geospatial env-intelligence console
               </p>
-              <div className="mt-1 flex flex-wrap items-center gap-2">
-                <Badge variant="ai">{stats.total} Sites</Badge>
-                <Badge variant="danger">{stats.critical} Critical</Badge>
-                <Badge variant="warning">{stats.highRisk} High Risk</Badge>
-                <Badge variant="success">{stats.activeMissions} Active Missions</Badge>
-                <Button
-                  variant="secondary"
-                  size="sm"
-                  className="ml-auto h-7 px-2.5 text-[11px]"
-                  onClick={() => setPlayback((p) => !p)}
-                >
-                  {playback ? <Pause className="mr-1 h-3 w-3" /> : <Play className="mr-1 h-3 w-3" />}
-                  {playback ? "Pause" : "Playback"}
-                </Button>
-                <Button
-                  variant="secondary"
-                  size="sm"
-                  className="h-7 px-2.5 text-[11px]"
-                  onClick={() => mapRef.current?.fitAllSites()}
-                >
-                  <Globe2 className="mr-1 h-3 w-3" />
-                  Fit India
-                </Button>
-                <Button
-                  variant="secondary"
-                  size="sm"
-                  className="h-7 px-2.5 text-[11px]"
-                  onClick={() => mapRef.current?.resetView()}
-                >
-                  Reset View
-                </Button>
-              </div>
             </GlassPanel>
           </motion.div>
-
-          <MapLayerControls
-            activeLayers={activeLayers}
-            onToggleLayer={handleToggleLayer}
-            className="absolute left-4 top-[13rem] z-20 md:left-6 md:top-[13.5rem]"
-          />
-
-          <MapSiteNavigator
-            sites={mapSites}
-            selectedId={selectedId}
-            onSelect={handleSelect}
-            className="absolute bottom-4 left-1/2 z-20 -translate-x-1/2 md:bottom-6"
-          />
-
-          <MapSiteMetricsCard
-            site={selectedSite}
-            className="absolute left-4 z-20 hidden lg:block lg:top-[calc(13rem+17.5rem)] xl:left-6"
-          />
-
-          <MapLiveEventStream
-            events={liveEvents}
-            onEventSelect={handleEventSelect}
-            className="absolute bottom-4 left-4 z-20 md:bottom-6 md:left-6"
-          />
 
           <MapIntelligenceDrawer
             site={selectedSite}
             open={drawerOpen}
             onClose={() => setDrawerOpen(false)}
+            sites={mapSites}
+            onSelectSite={handleSelect}
+            activeLayers={activeLayers}
+            onToggleLayer={handleToggleLayer}
+            events={liveEvents}
+            onEventSelect={handleEventSelect}
+            playback={playback}
+            onTogglePlayback={() => setPlayback((p) => !p)}
+            onFitIndia={() => mapRef.current?.fitAllSites()}
+            onResetView={() => mapRef.current?.resetView()}
           />
 
           {!drawerOpen ? (
@@ -245,10 +192,10 @@ export function MapExplorer({ embedded = false }: MapExplorerProps) {
               animate={{ opacity: 1, scale: 1 }}
               type="button"
               onClick={() => setDrawerOpen(true)}
-              className="pointer-events-auto absolute right-4 top-4 z-20 flex items-center gap-2 rounded-xl border border-[color:var(--color-border-1)] bg-[color:var(--color-surface-1)]/90 px-4 py-2.5 text-sm backdrop-blur-xl transition hover:border-emerald-500/30 md:right-6 md:top-6"
+              className="pointer-events-auto absolute right-4 top-4 z-20 flex items-center gap-2 rounded-xl border border-[color:var(--color-border-1)] bg-[color:var(--color-surface-1)]/90 px-4 py-2.5 text-xs backdrop-blur-xl transition hover:border-emerald-500/30 md:right-6"
             >
-              <MapPin className="h-4 w-4 text-emerald-400" />
-              {selectedSite.city}
+              <MapPin className="h-3.5 w-3.5 text-emerald-400" />
+              Show Sidebar ({selectedSite.city})
             </motion.button>
           ) : null}
         </>
