@@ -1,3 +1,13 @@
+/**
+ * CommandPalette.tsx
+ *
+ * Global application command menu overlay.
+ * It registers keydown window listeners for keyboard shortcut toggles (Ctrl + K)
+ * and dispatches routes dynamically across monitoring subpanels.
+ *
+ * Purpose & Logic Author: Vishal
+ */
+
 "use client";
 
 import {
@@ -42,6 +52,7 @@ export function CommandPalette() {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
 
+  // [Vishal] Keydown listener hook intercepting Ctrl+K / Escape shortcuts to toggle the menu
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
       if (!e.key) return;

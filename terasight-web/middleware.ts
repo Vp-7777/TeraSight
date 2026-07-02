@@ -1,9 +1,21 @@
+/**
+ * middleware.ts
+ *
+ * Next.js Edge Middleware route guards.
+ * It intercepts incoming HTTP requests at the edge, checks for the existence of
+ * the session token cookie, and automatically redirects unauthenticated requests
+ * away from secure pages, or authenticated requests away from login credentials forms.
+ *
+ * Purpose & Logic Author: Vishal
+ */
+
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
+  // [Vishal] Retrieve session validation cookie status to enforce route boundaries
   const sessionToken = request.cookies.get("terasight_session_token")?.value;
   const isAuthenticated = sessionToken === "authenticated";
 
@@ -32,7 +44,7 @@ export function middleware(request: NextRequest) {
   const isAuthRoute = authRoutes.some((route) => pathname === route);
 
   if (isProtectedRoute && !isAuthenticated) {
-    // Redirect to login if trying to access a protected route without being authenticated
+    // [Vishal] Redirect unauthorized users back to /login with callbackUrl params for automated return
     const url = request.nextUrl.clone();
     url.pathname = "/login";
     url.searchParams.set("callbackUrl", pathname);
@@ -40,7 +52,7 @@ export function middleware(request: NextRequest) {
   }
 
   if (isAuthRoute && isAuthenticated) {
-    // Redirect to dashboard if logged in and trying to access login/signup
+    // [Vishal] Redirect logged-in users away from authentication pages directly to the dashboard shell
     const url = request.nextUrl.clone();
     url.pathname = "/dashboard";
     return NextResponse.redirect(url);

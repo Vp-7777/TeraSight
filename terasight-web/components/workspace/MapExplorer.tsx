@@ -1,5 +1,16 @@
 "use client";
 
+/**
+ * MapExplorer.tsx
+ *
+ * This component hosts the primary map exploration console interface.
+ * It integrates the MapLibre Map with stateful tracking of selected cities,
+ * layer visibility configurations, and forwards execution actions directly
+ * into the right sidebar panel.
+ *
+ * Consolidated Layout & Purpose designed for: Vishal
+ */
+
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -44,8 +55,13 @@ interface MapExplorerProps {
 
 export function MapExplorer({ embedded = false }: MapExplorerProps) {
   const mapRef = useRef<MapLibreIndiaMapHandle>(null);
+  
+  // [Vishal] Core state hook tracking the currently active monitoring site
   const [selectedId, setSelectedId] = useState(mapSites[0].id);
+
+  // [Vishal] Track which geospatial data layers (Heatmap, Drone routes, labels) are turned on
   const [activeLayers, setActiveLayers] = useState<MapLayerId[]>(DEFAULT_ACTIVE_LAYERS);
+  
   const [drawerOpen, setDrawerOpen] = useState(!embedded);
   const [mapReady, setMapReady] = useState(!embedded);
   const [liveEvents, setLiveEvents] = useState<LiveMapEvent[]>(INITIAL_LIVE_EVENTS);
@@ -75,6 +91,7 @@ export function MapExplorer({ embedded = false }: MapExplorerProps) {
     [],
   );
 
+  // [Vishal] Selection action callback shifting map camera focus and refreshing site telemetry
   const handleSelect = useCallback((site: MapSite) => {
     setSelectedId(site.id);
     setDrawerOpen(true);

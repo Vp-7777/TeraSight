@@ -1,5 +1,15 @@
 "use client";
 
+/**
+ * PremiumAnalysisWorkflow.tsx
+ *
+ * Dedicated landing page demo workspace component.
+ * It renders the upload preview frame, custom recyclability ROI progress trackers,
+ * and the Cleanup Sandbox simulation slide controller.
+ *
+ * Main logic and features designed for: Vishal
+ */
+
 import { AnimatePresence, motion } from "framer-motion";
 import {
   Camera,
@@ -59,11 +69,13 @@ export function PremiumAnalysisWorkflow() {
     setCleanupSimPercent(0);
   }, [analysisResult]);
 
+  // [Vishal] Recyclability metrics aggregation memoized for the landing demo
   const wasteMetrics = useMemo(() => {
     if (!analysisResult) return null;
     return computeWasteMetrics(analysisResult.detections, analysisResult.summary.estimated_waste_kg);
   }, [analysisResult]);
 
+  // [Vishal] Dynamic recalculations scaling ESG variables in real-time as the cleanup slider changes
   const simulatedRemainingWaste = useMemo(() => {
     if (!analysisResult || !wasteMetrics) return 0;
     const cleanFraction = (cleanupSimPercent / 100) * (wasteMetrics.recyclabilityRatio / 100);

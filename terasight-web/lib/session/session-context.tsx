@@ -1,3 +1,14 @@
+/**
+ * session-context.tsx
+ *
+ * Client session state context provider.
+ * It manages user authentication status, holds active workspace indices (SMC, etc.),
+ * and synchronizes state between client-side localStorage and browser cookie records
+ * to keep Next.js middleware routers updated.
+ *
+ * Purpose & Logic Author: Vishal
+ */
+
 "use client";
 
 import { useRouter } from "next/navigation";
@@ -64,6 +75,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
   const [savedAnalysesList, setSavedAnalysesList] = useState<SavedAnalysis[]>([]);
   const [hydrated, setHydrated] = useState(false);
 
+  // [Vishal] Hydrate user session state and synchronize cookie variables on startup
   useEffect(() => {
     try {
       const raw = localStorage.getItem(SESSION_KEY);
@@ -97,6 +109,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     setHydrated(true);
   }, []);
 
+  // [Vishal] Login credentials validation: sets localStorage and creates max-age session cookie
   const login = useCallback((partial?: Partial<SessionUser>) => {
     const nextUser = { ...DEFAULT_USER, ...partial };
     localStorage.setItem(SESSION_KEY, JSON.stringify(nextUser));
@@ -104,6 +117,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     setUser(nextUser);
   }, []);
 
+  // [Vishal] Logout handler clearing localStorage tokens and expiring edge cookies
   const logout = useCallback(() => {
     localStorage.removeItem(SESSION_KEY);
     localStorage.removeItem(WORKSPACE_KEY);

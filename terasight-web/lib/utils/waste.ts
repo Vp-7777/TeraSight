@@ -1,3 +1,13 @@
+/**
+ * waste.ts
+ *
+ * Core utility for waste telemetry and ecological/economic modeling.
+ * This module handles density-weighted weight distribution, recyclability classification,
+ * carbon emissions recovery metrics, and financial ROI estimation.
+ *
+ * Purpose & Logic Author: Vishal
+ */
+
 import type { Detection } from "@/lib/types/analysis";
 
 export interface WasteBreakdown {
@@ -20,7 +30,7 @@ export interface WasteAnalysisMetrics {
   breakdown: WasteBreakdown[];
 }
 
-// Density factors to realistically distribute the total estimated weight among detected items
+// [Vishal] Density factors to realistically distribute the total estimated weight among detected items
 const DENSITY_FACTORS: Record<string, number> = {
   plastic: 1.0,        // light weight per item
   metal: 3.5,          // heavy weight per item
@@ -29,7 +39,7 @@ const DENSITY_FACTORS: Record<string, number> = {
   "hazardous waste": 2.0, // hazardous debris
 };
 
-// Recycling / recovery market value per kg (INR)
+// [Vishal] Recycling / recovery market value per kg (INR) to estimate net ROI
 const MARKET_VALUES: Record<string, number> = {
   plastic: 12,          // e.g. PET bottles / HDPE
   metal: 45,            // e.g. aluminum cans / steel scrap
@@ -38,7 +48,7 @@ const MARKET_VALUES: Record<string, number> = {
   "hazardous waste": -50, // disposal/treatment surcharge cost (negative ROI)
 };
 
-// Carbon offsets (kg of CO2 equivalent saved per kg of material processed)
+// [Vishal] Carbon offsets (kg of CO2 equivalent saved per kg of material processed) to track environmental ESG metrics
 const CARBON_FACTORS: Record<string, number> = {
   plastic: 1.8,
   metal: 4.5,
@@ -52,6 +62,7 @@ export function isClassRecyclable(className: string): boolean {
   return norm === "plastic" || norm === "metal" || norm === "glass";
 }
 
+// [Vishal] Main metrics computation function that aggregates weight, recyclability ratio, ROI, and carbon savings
 export function computeWasteMetrics(
   detections: Detection[],
   totalWeightKg: number
@@ -81,7 +92,7 @@ export function computeWasteMetrics(
   const breakdown: WasteBreakdown[] = weightedScores.map(({ detection, score }) => {
     const norm = detection.class.toLowerCase();
     
-    // Distribute totalWeightKg proportionally
+    // [Vishal] Distribute totalWeightKg proportionally across detections based on density scores
     const weightShare = totalWeightedScore > 0 ? (score / totalWeightedScore) : (1 / detections.length);
     const weightKg = parseFloat((totalWeightKg * weightShare).toFixed(2));
     

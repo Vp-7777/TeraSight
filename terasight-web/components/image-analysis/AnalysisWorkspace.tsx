@@ -1,3 +1,13 @@
+/**
+ * AnalysisWorkspace.tsx
+ *
+ * Primary user console interface for executing waste image analysis.
+ * This panel orchestrates dragging files, camera uploads, triggering the AI model pipeline,
+ * and displaying telemetry results along with interactive ESG cleanup simulations.
+ *
+ * Purpose & Logic Author: Vishal
+ */
+
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
@@ -43,6 +53,7 @@ function priorityVariant(priority: string) {
 }
 
 export function AnalysisWorkspace() {
+  // [Vishal] Refs and states for file selection and drag-drop interactions
   const fileInputRef = useRef<HTMLInputElement>(null);
   const cameraInputRef = useRef<HTMLInputElement>(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -72,11 +83,13 @@ export function AnalysisWorkspace() {
     setCleanupSimPercent(0);
   }, [analysisResult]);
 
+  // [Vishal] Memoized hook translating the AI detections list into density-weighted waste metrics
   const wasteMetrics = useMemo(() => {
     if (!analysisResult) return null;
     return computeWasteMetrics(analysisResult.detections, analysisResult.summary.estimated_waste_kg);
   }, [analysisResult]);
 
+  // [Vishal] Simulator calculations: computes remaining waste and environmental risk index (ERI) dynamically
   const simulatedRemainingWaste = useMemo(() => {
     if (!analysisResult || !wasteMetrics) return 0;
     const cleanFraction = (cleanupSimPercent / 100) * (wasteMetrics.recyclabilityRatio / 100);

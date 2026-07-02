@@ -1,5 +1,16 @@
 "use client";
 
+/**
+ * MapIntelligenceDrawer.tsx
+ *
+ * This file contains the unified Control Center Sidebar panel.
+ * It combines the dashboard controls for site navigation, layers toggles,
+ * playback options, camera adjustments, and displays detailed telemetry
+ * report analytics for selected sites.
+ *
+ * Refactored Layout & Tab Features designed for: Vishal
+ */
+
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
@@ -115,6 +126,7 @@ export function MapIntelligenceDrawer({
   onFitIndia,
   onResetView,
 }: MapIntelligenceDrawerProps) {
+  // [Vishal] State hook managing the active display view inside the Control Center Sidebar
   const [activeTab, setActiveTab] = useState<"telemetry" | "alerts" | "layers">("telemetry");
 
   return (

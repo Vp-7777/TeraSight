@@ -157,6 +157,12 @@ alembic upgrade head
 - Image upload workflow from the TeraSight web app.
 - Mock AI analysis pipeline: Web → API → PrithviQ inference service.
 - Independent PrithviQ inference service with a swappable mock analyzer (YOLO integration planned).
+- **Core features and logic modules developed for Vishal**:
+  - Proportional material density-weighted weight distribution algorithms.
+  - Net financial ROI evaluations with negative hazard sycharges.
+  - Carbon emissions savings offset tracking.
+  - Consolidated geospatial Control Center Sidebar with tabbed analytics and layers.
+  - Edge-level cookie-based session redirect middleware guards.
 
 ### Test the image analysis flow
 
