@@ -33,14 +33,6 @@ function createMarkerElement(site: MapSite, selected: boolean) {
   el.type = "button";
   el.className = "maplibregl-pulse-marker";
   el.setAttribute("aria-label", `${site.city}: ERI ${site.risk}, ${site.wasteKg} kg waste`);
-  el.title = [
-    site.city,
-    `ERI: ${site.risk}/100`,
-    `Waste: ${site.wasteKg} kg`,
-    `Carbon recovery: ${site.carbonRecoveryPct}%`,
-    `Cleanup: ${formatInr(site.cleanupCostInr)}`,
-    `Last scan: ${site.lastScanAt}`,
-  ].join(" · ");
   el.innerHTML = `
     <span class="maplibregl-pulse-marker__ring" style="--marker-color:${color}"></span>
     <span class="maplibregl-pulse-marker__dot" style="--marker-color:${color}"></span>
@@ -330,6 +322,45 @@ export const MapLibreIndiaMap = forwardRef<MapLibreIndiaMapHandle, MapLibreIndia
         el.addEventListener("click", (e) => {
           e.stopPropagation();
           onSelectRef.current(site);
+        });
+
+        // [Vishal] Premium interactive hover card tooltip popup
+        const color = riskColor(site.status);
+        const popup = new maplibregl.Popup({
+          closeButton: false,
+          closeOnClick: false,
+          offset: 14,
+          className: "premium-map-popup",
+        });
+
+        el.addEventListener("mouseenter", () => {
+          popup.setLngLat([site.lng, site.lat])
+            .setHTML(`
+              <div class="p-3 bg-[#0d1020]/95 border border-emerald-500/20 rounded-xl backdrop-blur-md shadow-xl text-left select-none pointer-events-none min-w-[190px] font-sans">
+                <p class="text-[9px] font-mono tracking-widest text-emerald-400 font-semibold uppercase">HOTSPOT DETECTED</p>
+                <p class="text-sm font-bold text-white mt-0.5">${site.city}</p>
+                <p class="text-[10px] text-slate-400">${site.label}</p>
+                <div class="mt-2 border-t border-slate-800/80 pt-2 space-y-1 text-[11px] text-slate-300">
+                  <div class="flex justify-between">
+                    <span class="text-slate-400">Risk Index:</span>
+                    <span class="font-semibold" style="color: ${color}">${site.risk}/100</span>
+                  </div>
+                  <div class="flex justify-between">
+                    <span class="text-slate-400">Est. Waste:</span>
+                    <span class="font-semibold text-white">${site.wasteKg} tons</span>
+                  </div>
+                  <div class="flex justify-between">
+                    <span class="text-slate-400">Cost (INR):</span>
+                    <span class="font-semibold text-emerald-400">${formatInr(site.cleanupCostInr)}</span>
+                  </div>
+                </div>
+              </div>
+            `)
+            .addTo(map);
+        });
+
+        el.addEventListener("mouseleave", () => {
+          popup.remove();
         });
 
         const marker = new maplibregl.Marker({ element: el, anchor: "center" })

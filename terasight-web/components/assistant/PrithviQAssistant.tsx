@@ -167,6 +167,28 @@ export function PrithviQAssistant() {
                     ))}
                   </div>
                 ))}
+                {messages.length === 1 && (
+                  <div className="mt-2 p-3 bg-emerald-500/5 border border-emerald-500/10 rounded-2xl space-y-2 animate-in fade-in duration-300">
+                    <p className="text-[10px] font-mono text-emerald-400 font-semibold tracking-widest uppercase">Suggested Commands</p>
+                    <div className="grid grid-cols-2 gap-2">
+                      {[
+                        { label: "🗺️ Open Map", cmd: "open map" },
+                        { label: "📊 Open Reports", cmd: "open reports" },
+                        { label: "🎯 Open Missions", cmd: "open missions" },
+                        { label: "🔬 Run Analysis", cmd: "open analyze" },
+                      ].map((item) => (
+                        <button
+                          key={item.cmd}
+                          type="button"
+                          onClick={() => sendMessage(item.cmd)}
+                          className="text-left px-2.5 py-1.5 rounded-xl bg-[color:var(--color-surface-1)] border border-[color:var(--color-border-1)] text-[11px] text-slate-400 hover:border-emerald-500/30 hover:text-white hover:bg-[color:var(--color-surface-2)] transition active:scale-[0.98]"
+                        >
+                          {item.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
                 {typing ? (
                   <div className="flex gap-1 rounded-2xl bg-[color:var(--color-surface-1)] px-4 py-3 w-fit">
                     <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-emerald-400 [animation-delay:0ms]" />

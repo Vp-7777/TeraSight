@@ -429,3 +429,16 @@ body {
   animation: float-glow-2 15s ease-in-out infinite;
 }
 
+/* Premium MapLibre Popup Overrides */
+.premium-map-popup .maplibregl-popup-content {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+
+.premium-map-popup .maplibregl-popup-tip {
+  border-top-color: #0d1020 !important;
+  border-bottom-color: #0d1020 !important;
+}
+

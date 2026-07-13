@@ -18,6 +18,8 @@ import {
   ScanSearch,
   Upload,
   ZoomIn,
+  ZoomOut,
+  RotateCcw,
   X,
   CheckCircle2,
   Sparkles,
@@ -73,6 +75,7 @@ export function AnalysisWorkspace() {
 
   const { saveAnalysis } = useSession();
   const [zoomOpen, setZoomOpen] = useState(false);
+  const [zoomScale, setZoomScale] = useState(1);
   const [toastMsg, setToastMsg] = useState<string | null>(null);
   const [streamingInsight, setStreamingInsight] = useState("");
   const [insightIndex, setInsightIndex] = useState(0);
@@ -578,30 +581,80 @@ export function AnalysisWorkspace() {
       <AnimatePresence>
         {zoomOpen && previewUrl ? (
           <div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4 cursor-zoom-out"
-            onClick={() => setZoomOpen(false)}
+            className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black/95 p-4"
+            onClick={() => {
+              setZoomOpen(false);
+              setZoomScale(1);
+            }}
           >
-            <button
-              type="button"
-              className="absolute right-6 top-6 flex h-10 w-10 items-center justify-center rounded-xl bg-white/10 text-white hover:bg-white/20 transition"
-              onClick={() => setZoomOpen(false)}
-            >
-              <X className="h-5 w-5" />
-            </button>
-            <motion.div
-              initial={{ opacity: 0, scale: 0.96 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.96 }}
-              className="relative max-h-[85vh] max-w-[90vw]"
+            {/* Top Toolbar */}
+            <div 
+              className="absolute top-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 bg-[color:var(--color-surface-2)]/90 border border-[color:var(--color-border-2)] rounded-2xl px-4 py-2 backdrop-blur-md animate-in slide-in-from-top duration-300"
               onClick={(e) => e.stopPropagation()}
             >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={previewUrl}
-                alt="Zoomed analysis preview"
-                className="max-h-[85vh] max-w-[90vw] rounded-2xl border border-white/10 object-contain shadow-2xl"
-              />
-            </motion.div>
+              <button
+                type="button"
+                className="flex h-8 w-8 items-center justify-center rounded-lg text-foreground-muted hover:text-foreground hover:bg-[color:var(--color-surface-3)] transition disabled:opacity-40"
+                disabled={zoomScale <= 1}
+                onClick={() => setZoomScale(s => Math.max(1, s - 0.25))}
+                aria-label="Zoom out"
+              >
+                <ZoomOut className="h-4 w-4" />
+              </button>
+              <span className="text-xs font-mono font-semibold min-w-[50px] text-center">
+                {Math.round(zoomScale * 100)}%
+              </span>
+              <button
+                type="button"
+                className="flex h-8 w-8 items-center justify-center rounded-lg text-foreground-muted hover:text-foreground hover:bg-[color:var(--color-surface-3)] transition disabled:opacity-40"
+                disabled={zoomScale >= 3}
+                onClick={() => setZoomScale(s => Math.min(3, s + 0.25))}
+                aria-label="Zoom in"
+              >
+                <ZoomIn className="h-4 w-4" />
+              </button>
+              <div className="w-[1px] h-4 bg-[color:var(--color-border-1)]" />
+              <button
+                type="button"
+                className="flex h-8 w-8 items-center justify-center rounded-lg text-foreground-muted hover:text-foreground hover:bg-[color:var(--color-surface-3)] transition"
+                onClick={() => setZoomScale(1)}
+                aria-label="Reset zoom"
+              >
+                <RotateCcw className="h-4 w-4" />
+              </button>
+              <div className="w-[1px] h-4 bg-[color:var(--color-border-1)]" />
+              <button
+                type="button"
+                className="flex h-8 w-8 items-center justify-center rounded-lg text-rose-400 hover:bg-rose-500/10 transition"
+                onClick={() => {
+                  setZoomOpen(false);
+                  setZoomScale(1);
+                }}
+                aria-label="Close"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+
+            <div 
+              className="relative max-h-[80vh] max-w-[85vw] overflow-auto flex items-center justify-center p-8 border border-white/10 rounded-2xl bg-black/30 backdrop-blur-sm"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <motion.div
+                initial={{ opacity: 0, scale: 0.96 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.96 }}
+                style={{ transform: `scale(${zoomScale})`, transition: 'transform 0.15s ease-out' }}
+                className="origin-center"
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={previewUrl}
+                  alt="Zoomed analysis preview"
+                  className="max-h-[70vh] max-w-[75vw] rounded-2xl border border-white/5 object-contain shadow-2xl"
+                />
+              </motion.div>
+            </div>
           </div>
         ) : null}
       </AnimatePresence>
