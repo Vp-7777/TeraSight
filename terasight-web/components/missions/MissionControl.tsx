@@ -100,6 +100,11 @@ export function MissionControl() {
     );
   };
 
+  // [Vishal] Allow canceling/deleting missions dynamically from lists
+  const handleCancelMission = (id: string) => {
+    setMissionList((prev) => prev.filter((m) => m.id !== id));
+  };
+
   // Derive stats dynamically from state
   const activeMissionsCount = missionList.filter((m) => m.status === "Active").length;
   const totalWasteRemoved = (missionList.reduce((acc, m) => acc + m.wasteRemovedKg, 0) / 1000).toFixed(1);
@@ -186,6 +191,16 @@ export function MissionControl() {
                       {mission.priority}
                     </Badge>
                     <Badge variant={statusVariant(mission.status)}>{mission.status}</Badge>
+                    
+                    {/* [Vishal] Cancel/Delete active mission */}
+                    <button
+                      type="button"
+                      onClick={() => handleCancelMission(mission.id)}
+                      className="ml-1 p-1 rounded-lg text-foreground-muted hover:text-rose-400 hover:bg-rose-500/10 transition"
+                      title="Cancel and remove mission"
+                    >
+                      <Trash2 className="h-3.5 w-3.5" />
+                    </button>
                   </div>
                 </div>
               </div>

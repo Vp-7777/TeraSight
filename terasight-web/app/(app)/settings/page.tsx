@@ -15,6 +15,11 @@ export default function SettingsPage() {
   const [email, setEmail] = useState("");
   const [saveSuccess, setSaveSuccess] = useState(false);
 
+  // [Vishal] Interactive toggle switch states
+  const [alerts, setAlerts] = useState(true);
+  const [missions, setMissions] = useState(true);
+  const [digest, setDigest] = useState(false);
+
   useEffect(() => {
     if (user) {
       setName(user.name);
@@ -40,6 +45,22 @@ export default function SettingsPage() {
     const timer = window.setTimeout(() => setSaveSuccess(false), 3000);
     return () => window.clearTimeout(timer);
   };
+
+  // Custom premium toggle component
+  const renderToggle = (checked: boolean, onChange: () => void) => (
+    <div
+      onClick={onChange}
+      className={`relative w-9 h-5 rounded-full p-0.5 cursor-pointer transition-all duration-250 ease-out flex items-center shrink-0 select-none ${
+        checked ? "bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.3)]" : "bg-[color:var(--color-surface-3)] border border-[color:var(--color-border-2)]"
+      }`}
+    >
+      <div
+        className={`w-3.5 h-3.5 rounded-full bg-white shadow-md transform transition-transform duration-250 ease-out ${
+          checked ? "translate-x-4" : "translate-x-0"
+        }`}
+      />
+    </div>
+  );
 
   return (
     <ModuleShell
@@ -87,18 +108,27 @@ export default function SettingsPage() {
 
           <GlassPanel className="space-y-5 p-6">
             <p className="font-medium text-foreground">Notifications</p>
-            <label className="flex items-center justify-between rounded-xl border border-[color:var(--color-border-1)] px-4 py-3 text-sm text-foreground-muted cursor-pointer hover:bg-[color:var(--color-surface-1)] transition">
-              AI analysis alerts
-              <input type="checkbox" defaultChecked className="rounded border-[color:var(--color-border-2)] bg-[color:var(--color-surface-1)]" />
-            </label>
-            <label className="flex items-center justify-between rounded-xl border border-[color:var(--color-border-1)] px-4 py-3 text-sm text-foreground-muted cursor-pointer hover:bg-[color:var(--color-surface-1)] transition">
-              Mission updates
-              <input type="checkbox" defaultChecked className="rounded border-[color:var(--color-border-2)] bg-[color:var(--color-surface-1)]" />
-            </label>
-            <label className="flex items-center justify-between rounded-xl border border-[color:var(--color-border-1)] px-4 py-3 text-sm text-foreground-muted cursor-pointer hover:bg-[color:var(--color-surface-1)] transition">
-              Weekly intelligence digest
-              <input type="checkbox" className="rounded border-[color:var(--color-border-2)] bg-[color:var(--color-surface-1)]" />
-            </label>
+            <div 
+              onClick={() => setAlerts(!alerts)}
+              className="flex items-center justify-between rounded-xl border border-[color:var(--color-border-1)] px-4 py-3 text-sm text-foreground-muted cursor-pointer hover:bg-[color:var(--color-surface-1)] transition"
+            >
+              <span>AI analysis alerts</span>
+              {renderToggle(alerts, () => {})}
+            </div>
+            <div 
+              onClick={() => setMissions(!missions)}
+              className="flex items-center justify-between rounded-xl border border-[color:var(--color-border-1)] px-4 py-3 text-sm text-foreground-muted cursor-pointer hover:bg-[color:var(--color-surface-1)] transition"
+            >
+              <span>Mission updates</span>
+              {renderToggle(missions, () => {})}
+            </div>
+            <div 
+              onClick={() => setDigest(!digest)}
+              className="flex items-center justify-between rounded-xl border border-[color:var(--color-border-1)] px-4 py-3 text-sm text-foreground-muted cursor-pointer hover:bg-[color:var(--color-surface-1)] transition"
+            >
+              <span>Weekly intelligence digest</span>
+              {renderToggle(digest, () => {})}
+            </div>
           </GlassPanel>
         </div>
       </form>
