@@ -24,7 +24,9 @@ import {
   Layers, 
   ExternalLink,
   Target,
-  Sparkles
+  Sparkles,
+  Eye,
+  EyeOff
 } from "lucide-react";
 import { useSession } from "@/lib/session/session-context";
 import { GlassPanel } from "@/components/ui/glass-panel";
@@ -35,6 +37,7 @@ import Link from "next/link";
 export default function ProfilePage() {
   const { user } = useSession();
   const [copied, setCopied] = useState(false);
+  const [showToken, setShowToken] = useState(false);
 
   const name = user?.name ?? "Vishal Sharma";
   const organization = user?.organization ?? "Surat Municipal Corporation";
@@ -123,7 +126,17 @@ export default function ProfilePage() {
               <div className="space-y-1.5">
                 <label className="text-xs text-slate-400">PrithviQ SDK API Access Token</label>
                 <div className="flex items-center gap-2 rounded-xl border border-[color:var(--color-border-1)] bg-[#05070e] p-2 px-3 text-xs font-mono text-emerald-400 select-all">
-                  <span className="flex-1 truncate">{mockApiKey}</span>
+                  <span className="flex-1 truncate">
+                    {showToken ? mockApiKey : "ts_live_51nx987••••••••••••••••••••2q1r0s"}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => setShowToken(!showToken)}
+                    className="text-slate-400 hover:text-white transition shrink-0 p-1 hover:bg-slate-800 rounded"
+                    title={showToken ? "Hide API Token" : "Show API Token"}
+                  >
+                    {showToken ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
+                  </button>
                   <button 
                     type="button" 
                     onClick={handleCopyKey}
