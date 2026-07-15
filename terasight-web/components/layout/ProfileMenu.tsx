@@ -20,7 +20,7 @@ import { useThemeToggle } from "@/lib/theme/use-theme-toggle";
 import { cn } from "@/lib/utils";
 
 const menuItems = [
-  { label: "View Profile", href: "/settings", icon: User },
+  { label: "View Profile", href: "/profile", icon: User },
   { label: "Organization", href: "/organizations", icon: Building2 },
   { label: "Workspace Switcher", href: "/dashboard", icon: Users },
   { label: "Account Settings", href: "/settings", icon: Settings },
@@ -86,7 +86,7 @@ export function ProfileMenu({ compact = false }: { compact?: boolean }) {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 8, scale: 0.98 }}
             transition={{ duration: 0.18 }}
-            className="absolute bottom-full right-0 z-50 mb-2 w-64 overflow-hidden rounded-2xl border border-[color:var(--color-border-1)] bg-background-elevated/95 shadow-2xl backdrop-blur-xl"
+            className="absolute top-full right-0 z-50 mt-2 w-64 overflow-hidden rounded-2xl border border-[color:var(--color-border-1)] bg-background-elevated/95 shadow-2xl backdrop-blur-xl"
             role="menu"
           >
             <div className="border-b border-[color:var(--color-border-1)] px-4 py-3">

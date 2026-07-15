@@ -35,6 +35,7 @@ export function middleware(request: NextRequest) {
     "/sites",
     "/team",
     "/before-after",
+    "/profile",
   ];
 
   const isProtectedRoute = protectedRoutes.some((route) => pathname.startsWith(route));
