@@ -56,7 +56,8 @@ interface MapExplorerProps {
 export function MapExplorer({ embedded = false }: MapExplorerProps) {
   const mapRef = useRef<MapLibreIndiaMapHandle>(null);
   
-  // [Vishal] Core state hook tracking the currently active monitoring site
+  // [Vishal] Core state hook tracking the currently active monitoring sites
+  const [sites, setSites] = useState<MapSite[]>(mapSites);
   const [selectedId, setSelectedId] = useState(mapSites[0].id);
 
   // [Vishal] Track which geospatial data layers (Heatmap, Drone routes, labels) are turned on
@@ -67,28 +68,51 @@ export function MapExplorer({ embedded = false }: MapExplorerProps) {
   const [liveEvents, setLiveEvents] = useState<LiveMapEvent[]>(INITIAL_LIVE_EVENTS);
   const [playback, setPlayback] = useState(false);
 
+  // [Vishal] Fetch live hotspots from PostgreSQL database
+  useEffect(() => {
+    let active = true;
+    async function loadLiveSites() {
+      try {
+        const res = await fetch("http://localhost:8000/api/sites");
+        if (res.ok && active) {
+          const data = await res.json();
+          if (data && data.length > 0) {
+            setSites(data);
+            setSelectedId(data[0].id);
+          }
+        }
+      } catch (err) {
+        console.warn("FastAPI offline. Reverting to local telemetry assets.", err);
+      }
+    }
+    loadLiveSites();
+    return () => {
+      active = false;
+    };
+  }, []);
+
   useEffect(() => {
     if (embedded) return;
     const siteParam = new URLSearchParams(window.location.search).get("site");
-    if (siteParam && mapSites.some((s) => s.id === siteParam)) {
+    if (siteParam && sites.some((s) => s.id === siteParam)) {
       setSelectedId(siteParam);
       setDrawerOpen(true);
     }
-  }, [embedded]);
+  }, [embedded, sites]);
 
   const selectedSite = useMemo(
-    () => mapSites.find((s) => s.id === selectedId) ?? mapSites[0],
-    [selectedId],
+    () => sites.find((s) => s.id === selectedId) ?? sites[0] ?? mapSites[0],
+    [selectedId, sites],
   );
 
   const stats = useMemo(
     () => ({
-      total: mapSites.length,
-      critical: mapSites.filter((s) => s.status === "Critical").length,
-      highRisk: mapSites.filter((s) => s.status === "Critical" || s.status === "High").length,
-      activeMissions: mapSites.filter((s) => s.mission.status === "Active").length,
+      total: sites.length,
+      critical: sites.filter((s) => s.status === "Critical").length,
+      highRisk: sites.filter((s) => s.status === "Critical" || s.status === "High").length,
+      activeMissions: sites.filter((s) => s.mission?.status === "Active").length,
     }),
-    [],
+    [sites],
   );
 
   // [Vishal] Selection action callback shifting map camera focus and refreshing site telemetry
@@ -102,9 +126,9 @@ export function MapExplorer({ embedded = false }: MapExplorerProps) {
   }, []);
 
   const handleEventSelect = useCallback((siteId: string) => {
-    const site = mapSites.find((s) => s.id === siteId);
+    const site = sites.find((s) => s.id === siteId);
     if (site) handleSelect(site);
-  }, [handleSelect]);
+  }, [handleSelect, sites]);
 
   useEffect(() => {
     if (!embedded) return;
@@ -116,14 +140,14 @@ export function MapExplorer({ embedded = false }: MapExplorerProps) {
     if (!playback || embedded) return;
     const interval = window.setInterval(() => {
       setSelectedId((current) => {
-        const idx = mapSites.findIndex((s) => s.id === current);
-        const next = mapSites[(idx + 1) % mapSites.length];
+        const idx = sites.findIndex((s) => s.id === current);
+        const next = sites[(idx + 1) % sites.length] ?? sites[0];
         setDrawerOpen(true);
         return next.id;
       });
     }, 6000);
     return () => window.clearInterval(interval);
-  }, [playback, embedded]);
+  }, [playback, embedded, sites]);
 
   useEffect(() => {
     if (embedded) return;
@@ -154,7 +178,7 @@ export function MapExplorer({ embedded = false }: MapExplorerProps) {
       {mapReady ? (
         <MapLibreIndiaMap
           ref={mapRef}
-          sites={mapSites}
+          sites={sites}
           activeLayers={activeLayers}
           selectedId={selectedId}
           onSelect={handleSelect}
@@ -191,7 +215,7 @@ export function MapExplorer({ embedded = false }: MapExplorerProps) {
             site={selectedSite}
             open={drawerOpen}
             onClose={() => setDrawerOpen(false)}
-            sites={mapSites}
+            sites={sites}
             onSelectSite={handleSelect}
             activeLayers={activeLayers}
             onToggleLayer={handleToggleLayer}
@@ -220,9 +244,9 @@ export function MapExplorer({ embedded = false }: MapExplorerProps) {
         <div className="absolute bottom-4 left-4 right-4 z-20">
           <GlassPanel className="flex flex-wrap items-center justify-between gap-4 px-5 py-3">
             <div className="flex flex-wrap items-center gap-3">
-              <Badge variant="ai">{mapSites.length} Active Sites</Badge>
+              <Badge variant="ai">{sites.length} Active Sites</Badge>
               <Badge variant="warning">
-                {mapSites.filter((s) => s.status === "High" || s.status === "Critical").length} High
+                {sites.filter((s) => s.status === "High" || s.status === "Critical").length} High
                 Risk
               </Badge>
             </div>

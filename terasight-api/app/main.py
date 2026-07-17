@@ -6,7 +6,7 @@ from core.config import settings
 from core.database import SessionLocal
 from models.site import Site
 from models.mission import Mission
-from routers import analyze, health
+from routers import analyze, health, sites, missions
 
 
 @asynccontextmanager
@@ -95,6 +95,8 @@ app.add_middleware(
 
 app.include_router(health.router)
 app.include_router(analyze.router)
+app.include_router(sites.router)
+app.include_router(missions.router)
 
 
 @app.get("/")
